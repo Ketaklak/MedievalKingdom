@@ -18,6 +18,8 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
   const [nearbyPlayers, setNearbyPlayers] = useState(mockMultiplayerData.getNearbyPlayers(player.username));
   const [selectedTarget, setSelectedTarget] = useState(null);
   const [armySize, setArmySize] = useState(mockMultiplayerData.getPlayerArmy(player.username));
+  const [showProfile, setShowProfile] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
 
   // Resource icons mapping
   const resourceIcons = {
