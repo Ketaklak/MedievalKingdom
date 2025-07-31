@@ -192,7 +192,19 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
             <Badge variant="outline">Army: {armySize}</Badge>
           </div>
         </div>
-        <Button onClick={onLogout} variant="outline">Logout</Button>
+        <div className="flex items-center space-x-2">
+          <Button onClick={() => setShowProfile(true)} variant="outline">
+            <User className="w-4 h-4 mr-2" />
+            Profile
+          </Button>
+          {player.username === 'admin' && (
+            <Button onClick={() => setShowAdmin(true)} variant="destructive">
+              <Settings className="w-4 h-4 mr-2" />
+              Admin Panel
+            </Button>
+          )}
+          <Button onClick={onLogout} variant="outline">Logout</Button>
+        </div>
       </div>
 
       {/* Resources Panel with Empire Bonuses */}
