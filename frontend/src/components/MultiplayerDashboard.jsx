@@ -234,11 +234,15 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
       </div>
 
       <Tabs defaultValue="kingdom" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 bg-slate-800/50">
+        <TabsList className="grid w-full grid-cols-5 bg-slate-800/50">
           <TabsTrigger value="kingdom">Kingdom</TabsTrigger>
           <TabsTrigger value="military">Military</TabsTrigger>
           <TabsTrigger value="diplomacy">Diplomacy</TabsTrigger>
           <TabsTrigger value="rankings">Rankings</TabsTrigger>
+          <TabsTrigger value="chat">
+            <MessageCircle className="w-4 h-4 mr-2" />
+            Chat
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="kingdom" className="space-y-6">
