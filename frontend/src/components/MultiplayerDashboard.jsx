@@ -539,6 +539,41 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="chat" className="space-y-6">
+          <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm">
+            <CardContent className="p-6">
+              <ChatSystem player={player} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Profile Modal */}
+        <ProfileModal 
+          isOpen={showProfile} 
+          onClose={() => setShowProfile(false)} 
+          player={player}
+          onUpdate={(updatedPlayer) => {
+            // Update current player data
+            Object.assign(player, updatedPlayer);
+          }}
+        />
+
+        {/* Admin Panel */}
+        {showAdmin && player.username === 'admin' && (
+          <div className="fixed inset-0 z-50 bg-black/80">
+            <div className="h-full overflow-y-auto">
+              <AdminPanel currentUser={player} />
+              <Button 
+                onClick={() => setShowAdmin(false)}
+                className="fixed top-4 right-4 z-60"
+                variant="outline"
+              >
+                Close Admin Panel
+              </Button>
+            </div>
+          </div>
+        )}
       </Tabs>
     </div>
   );
