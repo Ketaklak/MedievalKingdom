@@ -4,8 +4,11 @@ import { Button } from './ui/button';
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Coins, Hammer, TreePine, Mountain, Wheat, Crown, Clock, Users, Sword, Shield, TrendingUp, Star } from 'lucide-react';
+import { Coins, Hammer, TreePine, Mountain, Wheat, Crown, Clock, Users, Sword, Shield, TrendingUp, Star, MessageCircle, User, Settings } from 'lucide-react';
 import { mockMultiplayerData } from '../utils/mockMultiplayerData';
+import ChatSystem from './ChatSystem';
+import ProfileModal from './ProfileModal';
+import AdminPanel from './AdminPanel';
 
 const MultiplayerDashboard = ({ player, onLogout }) => {
   const [resources, setResources] = useState(mockMultiplayerData.getPlayerResources(player.username));
