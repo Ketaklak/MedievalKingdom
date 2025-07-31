@@ -74,12 +74,21 @@ const AuthScreen = ({ onLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isLogin) {
-      // Mock login for now
-      onLogin({
-        username: formData.username,
-        kingdomName: formData.username + "'s Kingdom",
-        empire: 'norman'
-      });
+      // Mock login - check for admin account
+      if (formData.username === 'admin' && formData.password === 'admin') {
+        onLogin({
+          username: 'admin',
+          kingdomName: 'System Administration',
+          empire: 'system'
+        });
+      } else {
+        // Regular login
+        onLogin({
+          username: formData.username,
+          kingdomName: formData.username + "'s Kingdom",
+          empire: 'norman'
+        });
+      }
     } else {
       // Registration
       onLogin({
