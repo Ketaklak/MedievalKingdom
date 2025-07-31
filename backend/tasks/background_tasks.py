@@ -2,8 +2,8 @@ import asyncio
 import logging
 import random
 from datetime import datetime, timedelta
-from ..database.mongodb import db
-from ..game.buildings import BuildingSystem
+from database.mongodb import db
+from game.buildings import BuildingSystem
 
 logger = logging.getLogger(__name__)
 
