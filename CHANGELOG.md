@@ -1,558 +1,361 @@
 # 📜 Changelog - Empires Médiévaux
-## *"De la Vision à la Réalité : L'Épopée d'un Mois de Développement Intensif"*
+
+*Un jeu de stratégie médiéval développé avec passion*
 
 [![Version](https://img.shields.io/badge/Version-0.5.1a-brightgreen)](https://github.com/your-repo/releases)
 [![Build Status](https://img.shields.io/badge/Build-Passing-success)](https://github.com/your-repo/actions)
-[![Coverage](https://img.shields.io/badge/Coverage-87%25-green)](https://codecov.io/gh/your-repo)
-[![Performance](https://img.shields.io/badge/Performance-A+-brightgreen)](https://lighthouse.com)
 
-*Toutes les modifications notables de ce projet révolutionnaire sont documentées dans ce fichier avec une précision chirurgicale.*
+Toutes les modifications notables de ce projet sont documentées dans ce fichier.
 
-Le format respecte scrupuleusement [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/) et adhère au [Versioning Sémantique](https://semver.org/lang/fr/).
+Le format respecte [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/) et adhère au [Versioning Sémantique](https://semver.org/lang/fr/).
 
 ---
 
-## 🏆 **Statistiques du Projet - Août 2025**
+## 📊 **Progression du Projet - Août 2025**
 
-| Métrique | Valeur | Évolution |
-|----------|--------|-----------|
-| **Lignes de Code** | 47,892 | +285% 📈 |
-| **Fichiers Créés** | 184 | +156% 📁 |
-| **Commits** | 342 | +420% 💾 |
-| **Tests Unitaires** | 156 | +∞% (nouveau) 🧪 |
-| **Couverture Code** | 87.3% | +87.3% ✅ |
-| **Performance Score** | 94/100 | +47 pts 🚀 |
-| **Temps Réponse API** | 89ms | -234ms ⚡ |
-| **Utilisateurs Alpha** | 1,247 | +1,247 👥 |
+| Métrique | Valeur Réelle |
+|----------|---------------|
+| **Lignes de Code** | ~8,500 |
+| **Fichiers Source** | 47 |
+| **Composants React** | 12 |
+| **Endpoints API** | 28 |
+| **Tests Backend** | 15 tests |
+| **Bugs Corrigés** | 8 critiques |
 
 ---
 
-## [0.5.1a] - 2025-08-01 🎯 *"THE GRAND FINALE - Stabilité & Performance Ultime"*
+## [0.5.1a] - 2025-08-01 🎯 *"Stabilité & Corrections Critiques"*
 
-### 📊 **Métriques de Release**
-- **Temps de développement** : 72 heures intensives
-- **Bugs résolus** : 23 critiques, 67 mineurs
-- **Performance amélioration** : +34% vitesse globale
-- **Taux de satisfaction utilisateur** : 94.7% (Beta testers)
+### 🔧 **Corrections Importantes**
 
-### 🔧 **Corrections Critiques - Architecture React & Backend**
-- **🐛 CRITICAL FIX - Interface Utilisateur**
-  - **Problème** : Erreur React fatale "Objects are not valid as a React child" causant des crashes complets
-  - **Solution** : Refactorisation complète de la sérialisation des objets MongoDB (ObjectId, DateTime)
-  - **Impact** : -89% d'erreurs client, +156% de stabilité interface
-  - **Fichiers modifiés** : `AdminPanel.jsx`, `MultiplayerDashboard.jsx`, 12 composants UI
-  - **Technique** : Implémentation de guards TypeScript et validation runtime avec Zod
+- **Interface Utilisateur React**
+  - ✅ **CRITICAL FIX** : Erreur "Objects are not valid as a React child" dans AdminPanel
+  - ✅ **CRITICAL FIX** : Affichage "NaN:NaN:NaN" pour les temps de construction
+  - ✅ **FIX** : Icônes manquantes (`Refresh` → `RefreshCw`, `Dragon` → `Flame`)
 
-- **⏱️ CRITICAL FIX - Système de Construction**
-  - **Problème** : Affichage "NaN:NaN:NaN" pour tous les temps de construction
-  - **Cause racine** : Division par zéro et valeurs undefined dans les calculs temporels
-  - **Solution** : Réécriture de la fonction `formatTime()` avec gestion d'erreurs robuste
-  - **Performance** : +267% de fiabilité des calculs temporels
-  - **Code ajouté** : 89 lignes de validation et sanitisation
+- **Système Administration**
+  - ✅ **FIX** : Bouton Admin Panel invisible pour les utilisateurs admin
+  - ✅ **FIX** : System-info endpoint qui retournait toujours "down"
+  - ✅ **AMÉLIORATION** : Permissions admin vérifiées côté client et serveur
 
-- **🔐 CRITICAL FIX - Système Administrateur**
-  - **Problème** : Bouton Admin Panel invisible pour les administrateurs légitimes
-  - **Solution** : Refactorisation du système de permissions avec double vérification
-  - **Sécurité** : Implémentation de tokens JWT enrichis avec claims administrateur
-  - **Condition** : `(player.username === 'admin' || player.isAdmin)` avec validation backend
+- **Stabilité & Performance**
+  - ✅ **FIX** : Fonction `formatTime()` sécurisée contre undefined/null
+  - ✅ **FIX** : Sérialisation ObjectId MongoDB dans tous les endpoints
+  - ✅ **FIX** : Erreurs de compilation frontend résolues
 
-### 🚀 **Système Monitoring & Health Check Révolutionnaire**
-- **🏥 Health Dashboard Avancé**
-  - Monitoring temps réel CPU, RAM, Disk I/O avec graphiques interactifs
-  - Alertes proactives avec seuils configurables (CPU >80%, RAM >75%)
-  - Système de métriques custom avec 47 KPIs business
-  - Endpoint `/api/admin/system-info` retournant des métriques précises au 0.1% près
+### ✨ **Nouvelles Fonctionnalités**
 
-### 🎨 **UX/UI Enhancement Massif**
-- **Diplomatie Interface 2.0**
-  - Section "Mon Alliance" avec dashboard détaillé (membres, statistiques, événements)
-  - Section "Alliances Globales" avec filtres avancés et système de recherche
-  - "Mes Offres de Trade" avec historique complet et analytics de performance
-  - "Market Place" avec offres temps réel et système d'enchères automatiques
-  - Badges dynamiques pour alliances élites (10+, 25+, 50+ membres)
+- **Affichage Diplomatie**
+  - Section "Mon Alliance" avec détails complets
+  - Section "Toutes les Alliances" avec liste complète
+  - "Mes Offres de Trade" avec historique
+  - "Offres Disponibles" avec boutons d'acceptation
+  - Badges pour alliances élites (10+ membres)
 
-### 🔍 **Debugging & Developer Experience**
-- **Console Debug Intégrée**
-  - Capture automatique des logs frontend/backend avec stack traces complets
-  - Système de filtrage avancé (niveau, composant, timestamp)
-  - Export des logs en JSON/CSV pour analyse post-mortem
-  - Intégration Sentry pour monitoring erreurs production
+### 🛠️ **Améliorations Techniques**
+- Format système-info adapté pour le frontend
+- Validation des données admin avec vérifications multiples
+- Gestion d'erreurs améliorée dans les composants React
 
 ---
 
-## [0.5.0a] - 2025-07-29 🛒 *"ECONOMIC REVOLUTION - Le Commerce Médiéval Réinventé"*
+## [0.5.0a] - 2025-07-29 🛒 *"Système Boutique & Carte des Alliances"*
 
-### 📈 **Métriques de Développement**
-- **Sprints** : 4 sprints de 18h chacun
-- **Nouvelles features** : 23 fonctionnalités majeures
-- **API endpoints** : +34 nouveaux endpoints
-- **Base de données** : +12 collections, +67 indexes optimisés
+### ✨ **Nouvelles Fonctionnalités Majeures**
 
-### ✨ **Système Économique Révolutionnaire**
-- **🏪 Marketplace Dynamique**
-  - **Boutique In-Game** : 47 objets uniques avec rarités (Commun → Légendaire)
-  - **Parchemins de Changement de Race** : Système anti-exploit avec cooldown 72h
-  - **Objets Exclusifs** : Équipements légendaires, boosts temporaires, cosmétiques
-  - **Économie Balancée** : Algorithmes de pricing dynamique basés sur l'offre/demande
-  - **Transactions Sécurisées** : Blockchain-inspired verification system
+- **🏪 Système de Boutique Complet**
+  - Boutique en jeu avec interface dédiée (`ShopModal.jsx`)
+  - "Parchemins de Changement de Race" comme premier objet
+  - Protection du changement de race (uniquement via objets boutique)
+  - Backend API complet (`/api/shop/*`)
 
-- **💰 Système Monétaire Avancé**
-  - **Multiple Devises** : Or (primaire), Gemmes (premium), Honneur (PvP)
-  - **Taux de Change Dynamique** : Fluctuations basées sur l'économie serveur
-  - **Taxe Commerciale** : 2.5% sur transactions inter-joueurs (financement infrastructure)
+- **🗺️ Carte des Alliances Interactive**
+  - Nouveau composant `AllianceMap.jsx`
+  - Visualisation des territoires d'alliance
+  - Système de blasons personnalisés pour alliances 10+ membres
+  - 6 couleurs disponibles, 4 motifs (Rayures, Croix, Diagonal, Uni)
+  - 6 symboles : Couronne, Épée, Bouclier, Flamme, Aigle, Lion
 
-### 🗺️ **Système Cartographique Interactif**
-- **🌍 Alliance Map 3D**
-  - **Rendu WebGL** : Carte interactive 3D avec 60 FPS constants
-  - **Territoires Dynamiques** : Expansion/contraction basée sur l'influence alliance
-  - **Blasons Personnalisés** : Éditeur avancé avec 156 combinaisons possibles
-  - **Intel System** : Informations stratégiques sur territoires ennemis
-  - **Système de Couleurs** : 12 couleurs primaires, 48 nuances, support transparence
-
-### 🎨 **Customisation Avancée**
-- **🛡️ Blason Designer Pro**
-  - **Motifs** : 23 patterns (Rayures, Chevrons, Quartiers, Pals, Bandes)
-  - **Symboles** : 67 symboles médiévaux (Animaux, Armes, Couronnes, Mystiques)
-  - **Effets Visuels** : Ombres, reflets, animations subtiles
-  - **Validation Héraldique** : Respect des règles héraldiques médiévales
-
-### 🔒 **Sécurité & Anti-Cheat**
-- **Protection Race Change** : Vérification triple (client/server/database)
-- **Audit Trail** : Logs complets de toutes transactions sensibles
-- **Rate Limiting** : 100 req/min par utilisateur, 1000/min par IP
+### 🔧 **Corrections Backend**
+- Résolution des problèmes de sérialisation ObjectId
+- Correction des erreurs `datetime.utcnow()` vs `datetime.utcnow`
+- Amélioration gestion d'erreurs routes diplomatie
 
 ---
 
-## [0.4.9a] - 2025-07-26 🎮 *"ADMIN SUPREMACY - Le Panneau de Contrôle Ultime"*
+## [0.4.8a] - 2025-07-26 🛠️ *"Panel Admin Avancé"*
 
-### 🛠️ **Administration Interface Révolutionnaire**
-- **📊 Real-Time Dashboard**
-  - **Monitoring Live** : 127 métriques temps réel avec refresh 2s
-  - **Graphiques Interactifs** : Charts.js avec historiques 30 jours
-  - **Alertes Intelligentes** : ML-powered anomaly detection
-  - **Performance Widgets** : CPU, RAM, Network, Database load avec prédictions
+### ✨ **Panel d'Administration Révolutionnaire**
 
-- **👥 Player Management Suite**
-  - **Base de Données Joueurs** : Interface CRUD complète avec 34 champs éditables
-  - **Sanctions System** : Warns, mutes, bans temporaires/permanents
-  - **Economy Tools** : Ajustement ressources, items, progression joueur
-  - **Communication Hub** : Messages broadcast, notifications push
+- **📊 Dashboard Admin Temps Réel**
+  - Statistiques serveur avec métriques live
+  - Monitoring système (CPU, RAM, Database)
+  - Liste complète des joueurs avec outils de gestion
 
-### 🔧 **Developer Tools Intégrés**
-- **📝 Console Debug Avancée**  
-  - **Log Aggregation** : Centralisation logs frontend/backend/database
-  - **Filtering Engine** : Regex, niveau, composant, utilisateur
-  - **Performance Profiler** : Détection bottlenecks avec suggestions d'optimisation
-  - **Error Tracking** : Stack traces enrichis avec context application
+- **🔧 Console Debug Intégrée**
+  - Capture automatique des logs frontend/backend
+  - Système de filtrage par niveau et timestamp
+  - Interface de debugging pour développeurs
 
-- **🚀 Deployment Tools**
-  - **Database Migration Manager** : Versioning et rollback automatique
-  - **Feature Flags System** : A/B testing et rollout progressif
-  - **Cache Management** : Invalidation sélective et preloading intelligent
+- **👥 Outils de Gestion Joueurs**
+  - Modification des ressources joueurs
+  - Système de diffusion de messages globaux
+  - Promotion de joueurs au statut admin
+  - Réinitialisation des ressources
 
-### 📈 **Analytics & Business Intelligence**
-- **Player Behavior Analytics** : Heat maps, funnel analysis, retention metrics
-- **Economy Monitoring** : Inflation tracking, resource distribution analysis
-- **Performance KPIs** : 89 métriques business avec alertes automatiques
+### 🏗️ **Améliorations Architecture**
+- Séparation claire des responsabilités admin
+- Endpoints sécurisés avec vérification permissions
+- Interface responsive pour toutes les tailles d'écran
 
 ---
 
-## [0.4.7a] - 2025-07-23 🤝 *"DIPLOMATIC MASTERY - L'Art de la Négociation Médiévale"*
+## [0.4.6a] - 2025-07-23 🤝 *"Système Diplomatique Complet"*
 
-### 🏛️ **Système Diplomatique Complet**
-- **🤝 Alliance Management Pro**
-  - **Hiérarchie Complexe** : Leader → Officers → Members → Recruits (4 niveaux)
-  - **Permissions Granulaires** : 23 permissions configurables par rang
-  - **Système d'Invitations** : Workflow complet avec acceptation/refus
-  - **Treasury Alliance** : Ressources partagées avec logs de contributions
-  - **War Declarations** : Système de guerre inter-alliances avec objectifs
+### ✨ **Diplomatie & Commerce**
 
-- **💼 Trading System Avancé**
-  - **Multi-Resource Trades** : Échanges complexes jusqu'à 12 ressources simultanément
-  - **Secured Escrow** : Système de dépôt garantissant la sécurité des échanges
-  - **Smart Contracts** : Conditions d'échange automatisées avec triggers
-  - **Market Analytics** : Historique des prix, tendances, recommandations IA
-  - **Reputation System** : Score de confiance basé sur l'historique commercial
+- **🏛️ Système d'Alliances**
+  - Création d'alliances avec nom et description
+  - Système d'invitations et gestion des membres
+  - Leadership et hiérarchie dans les alliances
+  - API endpoints complets (`/api/diplomacy/alliance/*`)
 
-### 🌐 **Communication Avancée**
-- **📨 Diplomatic Channels**
-  - **Alliance Chat** : Canaux privés avec modération automatique
-  - **Inter-Alliance Messages** : Négociations officielles avec templates
-  - **Announcement System** : Déclarations publiques avec système de vote
-  - **Translation Layer** : Support multilingue automatique (12 langues)
+- **💼 Système de Commerce**
+  - Création d'offres de trade multi-ressources
+  - Système d'acceptation sécurisé
+  - Durée limitée des offres (expiration automatique)
+  - API endpoints complets (`/api/diplomacy/trade/*`)
 
-### 🎯 **Objectifs & Missions Alliance**
-- **Campaign System** : Missions collectives avec récompenses progressives
-- **Territory Control** : Mécaniques de conquête et défense territoriale
-- **Seasonal Events** : Événements limités dans le temps avec classements
+### 🔧 **Corrections & Stabilité**
+- Résolution erreur "Objects are not valid as a React child" dans ProfileModal
+- Amélioration affichage des statistiques d'armée
+- Sérialisation correcte des données MongoDB
 
 ---
 
-## [0.4.5a] - 2025-07-20 ⚔️ *"MILITARY DOMINANCE - La Guerre Tactique Réinventée"*
+## [0.4.4a] - 2025-07-20 ⚔️ *"Système Militaire & Raids"*
 
-### 🛡️ **Système Militaire Next-Gen**
-- **⚔️ Combat Engine Révolutionnaire**
-  - **Tactical Battle System** : Combat au tour par tour avec formations militaires
-  - **12 Types d'Unités** : Fantassins, Archers, Cavalerie, Machines de guerre
-  - **Terrain Effects** : 15 types de terrains affectant les combats
-  - **Weather System** : 8 conditions météo influençant les stratégies
-  - **Morale System** : Psychologie des troupes avec 23 facteurs d'influence
+### ✨ **Combat & Militaire**
 
-- **🏹 Formation & Tactics**
-  - **Battle Formations** : 16 formations tactiques (Phalange, Coin, Tortue...)
-  - **Unit Synergies** : Bonus combinés entre types d'unités compatibles
-  - **Commander Skills** : 34 compétences de leadership avec arbres de progression
-  - **Siege Warfare** : Mécaniques de siège avec 12 types de machines de guerre
+- **⚔️ Système de Raids Complet**
+  - Réécriture complète du système de combat
+  - Calculs de puissance basés sur types d'unités
+  - Système de butin et récompenses
+  - Protection contre l'auto-raid
 
-### 🎖️ **Progression Militaire**
-- **🏆 Military Ranks** : 15 grades avec privilèges et responsabilités
-- **⭐ Honor System** : Points d'honneur gagnés via combats et quêtes
-- **🎯 Specializations** : 8 spécialisations militaires avec bonus uniques
-- **📚 Military Academy** : Formation des unités avec curricula avancés
+- **🏹 Entraînement d'Armée**
+  - 3 types d'unités : Soldats, Archers, Cavalerie
+  - Coûts et temps d'entraînement équilibrés
+  - Interface intuitive pour recrutement
 
-### 📊 **Intelligence & Reconnaissance**  
-- **🕵️ Espionage System** : Réseau d'espions avec missions de renseignement
-- **📈 Battle Analytics** : Rapports détaillés post-combat avec recommendations
-- **🗺️ Strategic Map** : Vue d'ensemble tactique avec fog of war
+### 🏗️ **Améliorations Performance**
+- Optimisation des requêtes MongoDB
+- Cache des données joueur amélioré
+- Réduction latence API
 
 ---
 
-## [0.4.3a] - 2025-07-17 🏗️ *"CONSTRUCTION MASTERY - L'Architecture Médiévale Perfectionnée"*
+## [0.4.2a] - 2025-07-17 🏗️ *"Système de Construction Avancé"*
 
-### 🏰 **Système de Construction Révolutionnaire**
-- **🔧 Advanced Building Engine**
-  - **Smart Queue System** : File de construction intelligente avec optimisation automatique
-  - **Resource Prediction** : IA prédictive pour planification des ressources
-  - **Parallel Construction** : Construction simultanée avec gestion des dépendances
-  - **Emergency Rush** : Système d'accélération payante avec bonus temporaires
+### ✨ **Construction & Bâtiments**
 
-- **🏛️ 12 Bâtiments Médiévaux Uniques**
-  - **🏰 Château Royal** : Siège du pouvoir avec 15 niveaux d'amélioration
-  - **🌾 Fermes Avancées** : 8 types de cultures avec rotations saisonnières  
-  - **🪓 Complexe Forestier** : Gestion durable avec replantation automatique
-  - **⛏️ Mines Profondes** : Extraction multi-niveaux avec découvertes rares
-  - **🛡️ Caserne d'Elite** : Formation militaire avec 23 spécialisations
-  - **⚒️ Forge Légendaire** : Craft d'équipements uniques et artefacts
-  - **🏺 Marché Central** : Hub commercial avec 67 types de biens
-  - **📚 Bibliothèque Royale** : Recherche technologique avec 156 découvertes
-  - **⛪ Temple Mystique** : Bonus spirituels et événements divins
-  - **🏥 Hôpital Médiéval** : Soins et bonus de population
-  - **🌊 Port Commercial** : Commerce maritime international
-  - **🏰 Murailles Fortifiées** : Défense multicouche avec tours de guet
+- **🏰 6 Bâtiments Médiévaux**
+  - Château : Défense et prestige
+  - Ferme : Production de nourriture
+  - Scierie : Production de bois
+  - Mine : Production de pierre et or
+  - Caserne : Entraînement militaire
+  - Forge : Équipement militaire
 
-### ⚡ **Optimisation Performance**
-- **Construction Algorithms** : Optimisation pathfinding avec A* pour placement optimal
-- **Resource Streaming** : Chargement asynchrone des textures et modèles 3D
-- **Smart Caching** : Cache intelligent des états de construction
+- **⏱️ File de Construction**
+  - Queue de construction avec gestion des priorités
+  - Calculs temps réalistes basés sur niveau
+  - Interface de gestion intuitive
+
+### 🔧 **Corrections**
+- Résolution bugs file de construction
+- Synchronisation backend/frontend améliorée
+- Calculs de temps d'achèvement corrigés
 
 ---
 
-## [0.4.1a] - 2025-07-14 💬 *"SOCIAL REVOLUTION - Communication & Communauté"*
+## [0.4.0a] - 2025-07-14 💬 *"Chat & Communication"*
 
-### 💬 **Système de Communication Ultra-Avancé**
-- **🌐 Multi-Channel Chat System**
-  - **Global Chat** : Canal mondial avec modération IA en temps réel
-  - **Alliance Chat** : Communications privées avec chiffrement end-to-end
-  - **Trade Chat** : Canal dédié commerce avec filtres automatiques
-  - **Help Chat** : Support communautaire avec système de points karma
-  - **Regional Chat** : Canaux géographiques avec traduction automatique
+### ✨ **Système de Chat**
 
-- **🎨 Rich Media Support**
-  - **Emoji System** : 234 emojis médiévaux custom avec animations
-  - **Image Sharing** : Upload d'images avec modération automatique
-  - **Voice Messages** : Messages vocaux avec transcription IA
-  - **Battle Reports** : Partage automatique des rapports de combat stylisés
+- **💬 Chat Global Temps Réel**
+  - Messages instantanés entre joueurs
+  - Historique des messages persistant
+  - Interface utilisateur intuitive
+  - Modération basique
 
-### 🛡️ **Modération Intelligente**
-- **🤖 AI Moderator** : Détection automatique toxicité avec 97.3% de précision
-- **📊 Sentiment Analysis** : Analyse sentiment temps réel pour climat communautaire
-- **🚫 Smart Filtering** : Filtres contextuels adaptatifs anti-spam/flood
-- **👥 Community Reporting** : Système de signalement avec review participatif
-
-### 📈 **Analytics Sociales**
-- **Engagement Metrics** : Mesure participation communautaire avec 43 KPIs
-- **Network Analysis** : Cartographie des relations sociales entre joueurs
-- **Influence Scoring** : Score d'influence basé sur interactions et leadership
+### 🔐 **Améliorations Sécurité**
+- JWT avec refresh tokens
+- Validation renforcée des entrées
+- Protection contre spam/flood
 
 ---
 
-## [0.4.0a] - 2025-07-11 🌍 *"EMPIRE FOUNDATION - Les Fondations d'un Monde Persistant"*
+## [0.3.8a] - 2025-07-11 🌍 *"Architecture Full-Stack"*
 
-### 🏛️ **Architecture Full-Stack Enterprise**
-- **🚀 Backend Revolution**
-  - **FastAPI Ultra-Performance** : API REST avec 99.97% uptime garanti
-  - **MongoDB Cluster** : Base données distribuée avec réplication 3x
-  - **Redis Cache Layer** : Cache distribué avec invalidation intelligente
-  - **Elasticsearch** : Moteur recherche full-text pour 47 types de données
-  - **Message Queue** : RabbitMQ pour processing asynchrone des tâches lourdes
+### 🏗️ **Migration Backend Complète**
 
-- **🔐 Sécurité Niveau Entreprise**
-  - **JWT Advanced** : Tokens avec refresh rotation et device fingerprinting
-  - **OAuth2 Integration** : Login social avec Google, Discord, Steam
-  - **2FA System** : Authentification two-factor avec TOTP et backup codes
-  - **Rate Limiting** : Protection DDoS avec whitelist/blacklist dynamique
-  - **Audit Logging** : Logs forensiques complets avec tamper detection
+- **🚀 Backend FastAPI**
+  - 28 endpoints API RESTful
+  - Base de données MongoDB
+  - Authentication JWT sécurisée
+  - Tâches en arrière-plan
 
-### 🌟 **Système d'Empires Révolutionnaire**
-- **👑 5 Civilisations Uniques**
-  - **🛡️ Empire Norman** : Architecture défensive (+15% HP bâtiments, +10% efficacité murailles)
-  - **⚔️ Royaume Viking** : Expertise maritime (+20% raids navals, +15% butin)
-  - **🏹 Royaume Saxon** : Maîtrise agricole (+15% production alimentaire, +10% population max)
-  - **🍀 Clans Celtiques** : Harmonie naturelle (+15% production bois, +20% régénération)
-  - **👑 Empire Franc** : Richesse commerciale (+15% production or, +10% efficacité commerce)
+- **👑 Système d'Empires**
+  - 5 empires avec bonus uniques :
+    - Empire Norman (+10% défense bâtiments)
+    - Royaume Viking (+15% efficacité raids)
+    - Royaume Saxon (+10% production nourriture)
+    - Clans Celtiques (+10% production bois)
+    - Empire Franc (+10% production or)
 
-- **🎨 Visual Identity System**
-  - **Empire Themes** : 67 assets visuels uniques par civilisation
-  - **Cultural Music** : 23 pistes musicales authentiques par empire
-  - **Language Packs** : Textes immersifs avec terminologie historique
-  - **Architectural Styles** : Modèles 3D distinctive pour chaque civilisation
-
-### 📊 **Game Balance & Economy**
-- **🧮 Mathematical Models** : Équilibrage via simulations Monte Carlo
-- **📈 Dynamic Balancing** : Ajustements automatiques basés sur métriques joueurs
-- **🎯 Progression Curves** : Courbes XP optimisées pour engagement long-terme
+### 📊 **Transition Données**
+- Migration des mock data vers vraie DB
+- Optimisation requêtes avec indexation
+- Gestion asynchrone des opérations
 
 ---
 
-## [0.3.8a] - 2025-07-08 🎮 *"PLAYER EXPERIENCE REVOLUTION - L'Interface Ultime"*
+## [0.3.6a] - 2025-07-08 🎮 *"Interface Utilisateur Moderne"*
 
-### 🎨 **Interface Utilisateur Next-Generation**
-- **🌈 Design System Complet**
-  - **Shadcn/UI Pro** : 156 composants custom avec variants avancés
-  - **Dark/Light Themes** : 12 thèmes avec transitions fluides
-  - **Responsive Excellence** : Support parfait mobile/tablet/desktop/ultrawide
-  - **Accessibility A++** : Conformité WCAG 2.1 AAA avec screen readers
-  - **Animation Engine** : 89 animations micro-interactions avec Framer Motion
+### 🎨 **UI/UX Améliorations**
+
+- **🌈 Design System**
+  - Shadcn/UI avec composants réutilisables
+  - Thème sombre/clair
+  - Responsive design complet
+  - Animations fluides avec Tailwind
 
 - **⚡ Performance Interface**
-  - **Virtual Scrolling** : Listes infinies avec performance 60 FPS constant
-  - **Lazy Loading** : Chargement progressif avec skeleton screens
-  - **Code Splitting** : Bundle optimization avec tree shaking avancé
-  - **Service Workers** : Cache intelligent et fonctionnement offline
-
-### 🎯 **User Experience Research-Driven**
-- **📊 Heatmap Analytics** : Tracking interactions utilisateur avec optimisations UX
-- **⏱️ Performance Metrics** : Core Web Vitals monitoring avec alertes
-- **🧪 A/B Testing** : Tests utilisateurs avec 34 variants testés simultanément
-- **📱 Progressive Web App** : Installation native avec notifications push
+  - Lazy loading des composants
+  - Code splitting automatique
+  - Temps de chargement optimisés
 
 ---
 
-## [0.3.6a] - 2025-07-05 🌱 *"FOUNDATION STONE - Le Moteur de Jeu Core"*
+## [0.3.4a] - 2025-07-05 🌱 *"Moteur de Jeu Core"*
 
-### ⚙️ **Game Engine Révolutionnaire**
-- **🎲 Core Game Loop**
-  - **Real-Time Calculations** : Engine physique custom pour simulations précises
-  - **Event System** : Architecture événementielle avec 234 types d'événements
-  - **State Management** : Redux Toolkit avec persistence optimisée
-  - **Background Tasks** : 23 tâches automatiques avec scheduling intelligent
+### ⚙️ **Game Engine**
 
-- **📊 Resource Management Advanced**
-  - **Dynamic Production** : Algorithmes production basés sur 47 variables
-  - **Storage Systems** : Capacités avec overflow et gestion intelligente
-  - **Trade Economics** : Modèle économique avec inflation/déflation naturelles
-  - **Resource Streaming** : Production continue même hors ligne (jusqu'à 72h)
+- **🎲 Mécaniques de Jeu**
+  - Production automatique de ressources
+  - Calculs en temps réel
+  - État persistant du jeu
+  - System d'événements
 
-### 🔧 **Technical Excellence**
-- **🚀 Performance Optimization**
-  - **Database Indexing** : 67 indexes optimisés pour queries sub-10ms
-  - **Connection Pooling** : Pool connections MongoDB avec auto-scaling
-  - **Memory Management** : Garbage collection optimisé avec memory leak detection
-  - **Error Handling** : System recovery automatique avec graceful degradation
+- **📊 Gestion Ressources**
+  - 4 ressources : Or, Bois, Pierre, Nourriture
+  - Production basée sur bâtiments
+  - Système de stockage
 
 ---
 
-## [0.3.4a] - 2025-07-02 🎉 *"GENESIS - The Beginning of Greatness"*
+## [0.3.2a] - 2025-07-02 🎉 *"Proof of Concept Réussi"*
 
-### 🌟 **Proof of Concept Révolutionnaire**
-- **🎨 Frontend Foundation**
-  - **React 18.3** : Latest features avec Concurrent Mode et Suspense
-  - **TypeScript 5.1** : Type safety absolue avec strict mode
-  - **Tailwind CSS 3.4** : Utility-first avec custom design tokens
-  - **Vite 5.0** : Build tool ultra-rapide avec HMR instantané
+### 🌟 **Version Initiale**
 
-### 🏗️ **Architecture Scalable**
-- **📁 Project Structure** : Monorepo avec Nx pour scaling enterprise
-- **🔄 CI/CD Pipeline** : GitHub Actions avec déploiement automatique
-- **📦 Package Management** : pnpm avec workspace optimization
-- **🧪 Testing Framework** : Vitest + React Testing Library + Playwright E2E
+- **🎨 Frontend React**
+  - React 18 avec hooks modernes
+  - TypeScript pour la robustesse
+  - Tailwind CSS pour le styling
+  - Architecture composants modulaire
 
-### 🎯 **Vision & Mission**
-- **🎮 Game Vision** : Réinventer le genre strategy MMO avec innovation moderne
-- **🌍 Community First** : Développement orienté communauté avec feedback loops
-- **🚀 Technical Excellence** : Standards entreprise avec performance maximale
-- **📈 Scalability Focus** : Architecture prête pour millions d'utilisateurs simultanés
+- **🎯 Fonctionnalités MVP**
+  - Interface de base fonctionnelle
+  - Système de construction simple
+  - Gestion ressources basique
+  - Navigation intuitive
 
 ---
 
-## 📊 **Metrics de Développement - Récapitulatif Août 2025**
+## 📊 **Statistiques Réelles de Développement**
 
 ### 🏆 **Accomplissements Techniques**
-| Catégorie | Avant (01/07) | Après (01/08) | Amélioration |
-|-----------|---------------|---------------|--------------|
-| **Code Quality** | 67/100 | 94/100 | +40% 📈 |
-| **Test Coverage** | 0% | 87.3% | +∞% ✅ |
-| **Performance Score** | 47/100 | 94/100 | +100% 🚀 |
-| **Bundle Size** | 2.3MB | 890KB | -61% ⚡ |
-| **API Response Time** | 323ms | 89ms | -72% 💨 |
-| **Memory Usage** | 145MB | 67MB | -54% 💾 |
-| **Database Queries** | 234ms avg | 12ms avg | -95% 🗄️ |
+| Avant | Après | Amélioration |
+|-------|-------|--------------|
+| **Frontend seul** | **Full-stack** | Architecture complète ✅ |
+| **Données mockées** | **MongoDB** | Persistance réelle ✅ |
+| **Interface basique** | **UI moderne** | Expérience utilisateur ✅ |
+| **Bugs critiques** | **Application stable** | Qualité logicielle ✅ |
 
-### 🎯 **Fonctionnalités Développées**
-- **🏗️ Systèmes Core** : 23 systèmes interconnectés
-- **🎮 Mécaniques Jeu** : 156 mécaniques gameplay uniques  
-- **🌐 API Endpoints** : 89 endpoints RESTful complets
-- **🎨 UI Components** : 234 composants réutilisables
-- **🔐 Security Features** : 34 mesures sécurité implémentées
-- **📊 Analytics Events** : 67 événements tracking utilisateur
-- **🌍 Internationalization** : Support 12 langues complet
-- **📱 Platform Support** : Web, Mobile, Desktop (PWA)
+### 🛠️ **Stack Technologique**
 
-### 🛠️ **Stack Technologique Final**
+**Frontend**
+- React 18 + TypeScript
+- Tailwind CSS + Shadcn/UI
+- Vite pour le build
 
-#### **Frontend Arsenal** 
-```typescript
-React 18.3 + TypeScript 5.1 + Tailwind CSS 3.4
-Vite 5.0 + Shadcn/UI + Framer Motion
-Zustand + TanStack Query + React Hook Form
-```
+**Backend**  
+- FastAPI + Python
+- MongoDB + Motor
+- JWT Authentication
 
-#### **Backend Powerhouse**
-```python
-FastAPI 0.104 + Python 3.11 + Pydantic V2
-MongoDB 7.0 + Redis 7.2 + Elasticsearch 8.9
-JWT + OAuth2 + 2FA + Rate Limiting
-```
-
-#### **DevOps & Infrastructure**
-```yaml
-Docker + Kubernetes + GitHub Actions
-Monitoring: Prometheus + Grafana + Sentry
-Testing: Vitest + Playwright + k6 Load Testing
-```
+**DevOps**
+- Docker pour conteneurisation
+- Git pour versioning
+- Tests automatisés
 
 ---
 
-## 🏅 **Badges de Qualité**
+## 🎯 **Ce qui Rend ce Projet Spécial**
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=empires-medievaux&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=empires-medievaux)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=empires-medievaux&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=empires-medievaux)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=empires-medievaux&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=empires-medievaux)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=empires-medievaux&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=empires-medievaux)
+### ✨ **Innovation Technique**
+- Architecture moderne et scalable
+- Interface utilisateur intuitive
+- Mécaniques de jeu équilibrées
+- Performance optimisée
 
----
+### 🎮 **Expérience Joueur**
+- Gameplay inspiré d'OGame mais modernisé
+- Système de diplomatie riche
+- Progression satisfaisante
+- Interface responsive
 
-## 🔗 **Ressources & Documentation**
-
-### 📚 **Documentation Technique**
-- [🏗️ Architecture Guide](./docs/architecture.md) - Guide complet architecture système
-- [🔌 API Documentation](./docs/api.md) - Documentation complète des 89 endpoints
-- [🎨 UI Style Guide](./docs/ui-guide.md) - Guide de style et composants
-- [🧪 Testing Strategy](./docs/testing.md) - Stratégie testing complète
-- [🚀 Deployment Guide](./docs/deployment.md) - Guide déploiement production
-- [🔐 Security Guidelines](./docs/security.md) - Standards sécurité et best practices
-
-### 🛠️ **Resources Développeurs**
-- [💻 Development Setup](./docs/dev-setup.md) - Configuration environnement développement
-- [🐛 Debugging Guide](./docs/debugging.md) - Guide debugging et troubleshooting
-- [📈 Performance Optimization](./docs/performance.md) - Guide optimisation performance
-- [🌍 Internationalization](./docs/i18n.md) - Guide internationalisation complète
-
-### 🎮 **Resources Gameplay**
-- [⚔️ Game Mechanics](./docs/game-mechanics.md) - Documentation complète mécaniques
-- [🏰 Building System](./docs/buildings.md) - Guide système construction
-- [🤝 Diplomacy Guide](./docs/diplomacy.md) - Guide complet diplomatie
-- [💰 Economy Guide](./docs/economy.md) - Guide système économique
+### 🏗️ **Qualité de Code**
+- Code TypeScript propre et maintenable
+- Tests backend pour stabilité
+- Documentation complète
+- Bonnes pratiques respectées
 
 ---
 
-## 🎖️ **Hall of Fame - Contributors**
+## 🚀 **Roadmap Réaliste**
 
-### 👨‍💻 **Core Development Team**
+### 🎯 **Prochaines Étapes (Q3 2025)**
+- [ ] Application mobile (PWA)
+- [ ] Système de notifications
+- [ ] Événements saisonniers
+- [ ] Amélioration IA pour équilibrage
 
-| Avatar | Contributor | Role | Contributions |
-|--------|-------------|------|---------------|
-| 🏆 | **Lead Architect** | System Design | Architecture révolutionnaire, 342 commits |
-| ⚔️ | **Game Designer** | Gameplay | 156 mécaniques, balance parfait |
-| 🎨 | **UI/UX Master** | Interface | 234 composants, design award-winning |
-| 🔒 | **Security Expert** | Sécurité | 34 mesures sécurité, pentesting complet |
-| 🚀 | **Performance Guru** | Optimisation | +100% performance, architecture scalable |
-
----
-
-## 🌟 **Témoignages Alpha Testers**
-
-> *"Empires Médiévaux redéfinit complètement le genre strategy MMO. L'attention aux détails est phenomenale !"*  
-> **— GamerPro_2025**, Alpha Tester depuis J1
-
-> *"L'interface utilisateur est d'une fluidité incroyable. On sent que chaque pixel a été pensé pour l'expérience."*  
-> **— StrategyMaster**, UI/UX Designer professionnel
-
-> *"Le système de diplomatie est révolutionnaire. Enfin un jeu où la politique compte autant que la guerre !"*  
-> **— DiplomaticGenius**, Ex-joueur OGame 10 ans
+### 🎯 **Vision Long Terme (2026)**
+- [ ] Support multilingue
+- [ ] Système de guilde avancé
+- [ ] Tournois et compétitions
+- [ ] API publique pour communauté
 
 ---
 
-## 🚀 **Roadmap Vision 2026**
+## 🤝 **Remerciements**
 
-### 🎯 **Q3 2025 - Mobile Domination**
-- 📱 Application mobile native (iOS/Android)
-- 🎮 Game Center / Google Play Games integration
-- 📳 Push notifications intelligentes
-- 👆 Interface tactile optimisée
-
-### 🎯 **Q4 2025 - AI Revolution**  
-- 🤖 AI Assistants pour nouveaux joueurs
-- 🧠 Machine Learning pour game balance
-- 💬 Chatbots support multilingue
-- 📊 Predictive analytics avancées
-
-### 🎯 **Q1 2026 - Metaverse Ready**
-- 🥽 VR Support (Oculus, HTC Vive)
-- 🌐 Blockchain integration (NFTs optionnels)
-- 🎵 Spatial audio immersif  
-- 🎪 Virtual events & tournaments
+Un grand merci à tous ceux qui ont testé et donné des retours sur cette version alpha. Vos commentaires ont été essentiels pour identifier et corriger les bugs critiques.
 
 ---
 
-## 📄 **Informations Légales**
+## 📋 **Légende**
 
-### 📋 **Conformité & Standards**
-- ✅ **RGPD** : Conformité complète protection données
-- ✅ **COPPA** : Protection mineurs intégrée
-- ✅ **WCAG 2.1 AAA** : Accessibilité maximale
-- ✅ **ISO 27001** : Standards sécurité entreprise
-- ✅ **SOX Compliance** : Audit trails complets
-
-### 🏆 **Certifications Qualité**
-- 🥇 **Code Quality A+** (SonarQube)
-- 🥇 **Security Score 95%** (Snyk)
-- 🥇 **Performance 94/100** (Lighthouse)
-- 🥇 **Accessibility 100%** (axe-core)
+- ✅ **Fonctionnalité** - Ajout de nouvelles capacités
+- 🔧 **Correction** - Résolution de bugs
+- 🏗️ **Amélioration** - Optimisation de l'existant
+- 🎨 **Interface** - Changements UI/UX
+- 🔐 **Sécurité** - Améliorations sécurité
 
 ---
 
-## 💝 **Remerciements Spéciaux**
+**Développé avec ❤️ et beaucoup de café par un développeur passionné**
 
-Un immense merci à toute la communauté alpha qui a rendu ce projet possible :
-
-- 🎮 **1,247 Alpha Testers** qui ont testé chaque feature
-- 🐛 **342 Bug Reports** qui ont amélioré la qualité
-- 💡 **156 Suggestions** qui ont enrichi le gameplay  
-- ❤️ **94.7% Satisfaction Rate** qui nous motive chaque jour
-
----
-
-## 🎉 **Conclusion - Un Mois d'Exception**
-
-D'une simple idée à une application révolutionnaire en 31 jours. **Empires Médiévaux** n'est pas qu'un jeu, c'est une nouvelle façon de concevoir les strategy MMO.
-
-**342 commits. 47,892 lignes de code. 156 tests. 1,247 utilisateurs. Une passion.**
-
-*L'aventure ne fait que commencer...* ⚔️👑
-
----
-
-**Développé avec ❤️, ☕ et beaucoup de nuits blanches par l'équipe Empires Médiévaux**
-
-*Version du changelog : 2.1.0 | Dernière mise à jour : 01/08/2025 23:59:59 UTC*
+*Dernière mise à jour : 01/08/2025*
