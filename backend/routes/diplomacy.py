@@ -411,7 +411,54 @@ async def accept_alliance_invite(
         logger.error(f"Failed to accept alliance invite: {e}")
         raise HTTPException(status_code=500, detail="Failed to accept alliance invite")
 
-@router.post("/alliance/leave")
+@router.get("/alliance/map")
+async def get_alliance_map():
+    """Get alliance map with flags for alliances with 10+ members"""
+    try:
+        # Get all alliances with their member counts
+        cursor = db.db.alliances.find({})
+        alliances = await cursor.to_list(length=None)
+        
+        alliance_map = []
+        
+        for alliance in alliances:
+            member_count = len(alliance.get("members", []))
+            
+            # Only show alliances with 10+ members on the map
+            if member_count >= 10:
+                # Generate random coordinates for the map
+                import random
+                
+                alliance_data = {
+                    "id": str(alliance["_id"]),
+                    "name": alliance["name"],
+                    "memberCount": member_count,
+                    "level": alliance.get("level", 1),
+                    "leaderUsername": alliance["leaderUsername"],
+                    "coordinates": {
+                        "x": random.randint(100, 900),
+                        "y": random.randint(100, 700)
+                    },
+                    "flag": {
+                        "color": random.choice(["red", "blue", "green", "purple", "gold", "silver"]),
+                        "symbol": random.choice(["crown", "sword", "shield", "dragon", "eagle", "lion"]),
+                        "pattern": random.choice(["solid", "stripes", "cross", "diagonal"])
+                    },
+                    "influence": min(100, member_count * 3),  # Influence radius on map
+                    "description": alliance.get("description", "")
+                }
+                
+                alliance_map.append(alliance_data)
+        
+        return {
+            "alliances": alliance_map,
+            "mapSize": {"width": 1000, "height": 800},
+            "totalAlliances": len(alliance_map)
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get alliance map: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get alliance map")
 async def leave_alliance(current_user: dict = Depends(get_current_user)):
     """Leave current alliance"""
     try:
