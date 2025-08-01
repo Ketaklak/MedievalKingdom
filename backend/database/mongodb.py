@@ -273,6 +273,7 @@ class MongoDB:
     async def add_raid_result(self, raid_data: dict) -> str:
         """Add a raid result"""
         try:
+            raid_data['timestamp'] = datetime.utcnow()
             result = await self.db.raids.insert_one(raid_data)
             return str(result.inserted_id)
         except Exception as e:
