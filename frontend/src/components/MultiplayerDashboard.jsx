@@ -53,6 +53,32 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
   });
   const { toast } = useToast();
 
+  useEffect(() => {
+    loadDiplomacyData();
+  }, []);
+
+  const loadDiplomacyData = async () => {
+    try {
+      // Load alliances data
+      const alliancesData = await apiService.getAlliances();
+      setAlliances(alliancesData.alliances || []);
+      
+      // Load my alliance
+      const myAllianceData = await apiService.getMyAlliance();
+      setMyAlliance(myAllianceData.alliance || null);
+      
+      // Load trade offers
+      const tradesData = await apiService.getTradeOffers();
+      setTradeOffers(tradesData.offers || []);
+      
+      // Load my trade offers
+      const myTradesData = await apiService.getMyTradeOffers();
+      setMyTradeOffers(myTradesData.offers || []);
+    } catch (error) {
+      console.error('Failed to load diplomacy data:', error);
+    }
+  };
+
   // Resource icons mapping
   const resourceIcons = {
     gold: Coins,
