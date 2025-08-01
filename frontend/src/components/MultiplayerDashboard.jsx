@@ -12,6 +12,7 @@ import { Coins, Hammer, TreePine, Mountain, Wheat, Crown, Clock, Users, Sword, S
 import { useRealTimeData, useLeaderboard, useNearbyPlayers } from '../hooks/useRealTimeData';
 import ChatSystem from './ChatSystem';
 import ProfileModal from './ProfileModal';
+import ShopModal from './ShopModal';
 import AdminPanel from './AdminPanel';
 import { useToast } from '../hooks/use-toast';
 import apiService from '../services/apiService';
