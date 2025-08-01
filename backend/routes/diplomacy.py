@@ -240,11 +240,24 @@ async def create_alliance(
             "experience": 0
         }
         
-        await db.db.alliances.insert_one(alliance)
+        result = await db.db.alliances.insert_one(alliance)
+        
+        # Prepare serializable response
+        response_alliance = {
+            "id": alliance["id"],
+            "name": alliance["name"],
+            "description": alliance["description"],
+            "leaderUsername": alliance["leaderUsername"],
+            "members": alliance["members"],
+            "createdAt": alliance["createdAt"].isoformat(),
+            "maxMembers": alliance["maxMembers"],
+            "level": alliance["level"],
+            "experience": alliance["experience"]
+        }
         
         return {
             "success": True,
-            "alliance": alliance
+            "alliance": response_alliance
         }
         
     except HTTPException:
