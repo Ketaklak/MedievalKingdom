@@ -342,11 +342,14 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span>Current Army Size:</span>
-                    <Badge variant="outline" className="text-lg px-3 py-1">{armySize} soldiers</Badge>
+                    <Badge variant="outline" className="text-lg px-3 py-1">{getArmySize()} soldiers</Badge>
                   </div>
                   <div className="space-y-2">
-                    <Button className="w-full bg-green-600 hover:bg-green-700">
-                      Recruit Soldiers (Cost: 50 gold, 30 food)
+                    <Button 
+                      onClick={handleRecruitSoldiers}
+                      className="w-full bg-green-600 hover:bg-green-700"
+                    >
+                      Recruit 10 Soldiers (Cost: 500 gold, 300 food)
                     </Button>
                     <Button className="w-full bg-blue-600 hover:bg-blue-700">
                       Train Army (Increase combat effectiveness)
