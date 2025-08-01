@@ -325,6 +325,13 @@ class MongoDB:
             queue = await cursor.to_list(length=None)
             for item in queue:
                 item['id'] = str(item['_id'])
+                # Remove the _id field to avoid serialization issues
+                del item['_id']
+                # Convert datetime objects to ISO format strings
+                if 'startTime' in item and hasattr(item['startTime'], 'isoformat'):
+                    item['startTime'] = item['startTime'].isoformat()
+                if 'completionTime' in item and hasattr(item['completionTime'], 'isoformat'):
+                    item['completionTime'] = item['completionTime'].isoformat()
             return queue
         except Exception as e:
             logger.error(f"Failed to get construction queue: {e}")
