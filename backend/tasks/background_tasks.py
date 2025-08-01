@@ -143,9 +143,26 @@ class BackgroundTasks:
             
             for item in completed_items:
                 try:
-                    # Get player
-                    player = await db.db.players.find_one({"_id": item["playerId"]})
+                    # Get player - handle both ObjectId and string player IDs
+                    from bson import ObjectId
+                    player_id = item["playerId"]
+                    
+                    # Try to find player by ObjectId first, then by userId field
+                    try:
+                        if isinstance(player_id, str) and len(player_id) == 24:
+                            # Try as ObjectId
+                            player = await db.db.players.find_one({"_id": ObjectId(player_id)})
+                        else:
+                            player = None
+                    except:
+                        player = None
+                    
+                    # If not found, try by userId field
                     if not player:
+                        player = await db.db.players.find_one({"userId": player_id})
+                    
+                    if not player:
+                        logger.warning(f"Player not found for construction item: {player_id}")
                         continue
                     
                     # Update building level
