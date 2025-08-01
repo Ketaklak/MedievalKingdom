@@ -175,6 +175,8 @@ class MongoDB:
             players = await cursor.to_list(length=limit)
             for i, player in enumerate(players):
                 player['id'] = str(player['_id'])
+                # Remove the _id field to avoid serialization issues
+                del player['_id']
                 player['rank'] = i + 1
             return players
         except Exception as e:
