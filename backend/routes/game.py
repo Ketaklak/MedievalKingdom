@@ -77,8 +77,13 @@ async def upgrade_building(
         new_resources = BuildingSystem.deduct_building_cost(player["resources"], building_type, target_level)
         
         # Create construction queue item
+        # Use userId field from player data, fallback to id
+        player_id = player.get("userId") or player.get("id") or player.get("_id")
+        if player_id:
+            player_id = str(player_id)  # Ensure it's a string
+        
         queue_item = BuildingSystem.create_construction_queue_item(
-            player["id"], building_id, building_type, target_level, player["empire"]
+            player_id, building_id, building_type, target_level, player["empire"]
         )
         
         # Update database
