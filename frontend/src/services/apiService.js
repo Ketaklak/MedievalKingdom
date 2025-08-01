@@ -322,6 +322,60 @@ class ApiService {
     }
   }
 
+  async updatePlayerAdmin(username, playerData) {
+    try {
+      const response = await api.put(`/admin/players/${username}`, playerData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to update player');
+    }
+  }
+
+  async deleteMessage(messageId) {
+    try {
+      const response = await api.delete(`/admin/messages/${messageId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to delete message');
+    }
+  }
+
+  async getAdminStats() {
+    try {
+      const response = await api.get('/admin/stats');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get admin stats');
+    }
+  }
+
+  async getAdminPlayers() {
+    try {
+      const response = await api.get('/admin/players');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get admin players');
+    }
+  }
+
+  async getAdminChatMessages() {
+    try {
+      const response = await api.get('/admin/chat-messages');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get admin chat messages');
+    }
+  }
+
+  async getAdminSystemInfo() {
+    try {
+      const response = await api.get('/admin/system-info');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get admin system info');
+    }
+  }
+
   // Army Training
   async trainArmy(trainingType = 'basic') {
     try {
