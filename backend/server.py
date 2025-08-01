@@ -131,6 +131,7 @@ api_router.include_router(game_router)
 api_router.include_router(chat_router)
 api_router.include_router(admin_router)
 api_router.include_router(diplomacy_router)
+api_router.include_router(shop_router)
 
 # Include API router in main app
 app.include_router(api_router)
