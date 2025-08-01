@@ -648,6 +648,136 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
           }}
         />
 
+        {/* Create Alliance Modal */}
+        <Dialog open={showCreateAlliance} onOpenChange={setShowCreateAlliance}>
+          <DialogContent className="bg-slate-800 border-slate-700">
+            <DialogHeader>
+              <DialogTitle>Create Alliance</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Alliance Name *</Label>
+                <Input
+                  value={allianceFormData.name}
+                  onChange={(e) => setAllianceFormData({...allianceFormData, name: e.target.value})}
+                  placeholder="Enter alliance name..."
+                  className="bg-slate-600 border-slate-500"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Description</Label>
+                <Textarea
+                  value={allianceFormData.description}
+                  onChange={(e) => setAllianceFormData({...allianceFormData, description: e.target.value})}
+                  placeholder="Describe your alliance..."
+                  className="bg-slate-600 border-slate-500"
+                  rows={3}
+                />
+              </div>
+              <div className="flex space-x-2">
+                <Button 
+                  onClick={handleCreateAlliance}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                >
+                  Create Alliance
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowCreateAlliance(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Create Trade Modal */}
+        <Dialog open={showCreateTrade} onOpenChange={setShowCreateTrade}>
+          <DialogContent className="bg-slate-800 border-slate-700 max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Create Trade Offer</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-6">
+              {/* What you're offering */}
+              <div>
+                <h3 className="font-medium mb-3 text-green-400">What you're offering:</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {Object.entries(tradeFormData.offering).map(([resource, amount]) => (
+                    <div key={resource} className="space-y-2">
+                      <Label className="capitalize">{resource}</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={amount}
+                        onChange={(e) => setTradeFormData({
+                          ...tradeFormData,
+                          offering: { ...tradeFormData.offering, [resource]: parseInt(e.target.value) || 0 }
+                        })}
+                        className="bg-slate-600 border-slate-500"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* What you're requesting */}
+              <div>
+                <h3 className="font-medium mb-3 text-amber-400">What you're requesting:</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {Object.entries(tradeFormData.requesting).map(([resource, amount]) => (
+                    <div key={resource} className="space-y-2">
+                      <Label className="capitalize">{resource}</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={amount}
+                        onChange={(e) => setTradeFormData({
+                          ...tradeFormData,
+                          requesting: { ...tradeFormData.requesting, [resource]: parseInt(e.target.value) || 0 }
+                        })}
+                        className="bg-slate-600 border-slate-500"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Duration */}
+              <div className="space-y-2">
+                <Label>Duration (seconds)</Label>
+                <Input
+                  type="number"
+                  min="300"
+                  value={tradeFormData.duration}
+                  onChange={(e) => setTradeFormData({...tradeFormData, duration: parseInt(e.target.value) || 3600})}
+                  className="bg-slate-600 border-slate-500"
+                />
+                <p className="text-xs text-slate-400">
+                  Current: {Math.floor(tradeFormData.duration / 3600)}h {Math.floor((tradeFormData.duration % 3600) / 60)}m
+                </p>
+              </div>
+
+              <div className="flex space-x-2">
+                <Button 
+                  onClick={handleCreateTrade}
+                  className="flex-1 bg-green-600 hover:bg-green-700"
+                >
+                  Create Trade Offer
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowCreateTrade(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
         {/* Admin Panel */}
         {showAdmin && player.username === 'admin' && (
           <div className="fixed inset-0 z-50 bg-black/80">
