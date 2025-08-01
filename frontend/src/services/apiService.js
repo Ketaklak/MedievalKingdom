@@ -376,6 +376,33 @@ class ApiService {
     }
   }
 
+  async broadcastMessage(content) {
+    try {
+      const response = await api.post('/admin/broadcast-message', { content });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to send broadcast');
+    }
+  }
+
+  async resetPlayerResources(username) {
+    try {
+      const response = await api.post('/admin/reset-player-resources', { username });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to reset player resources');
+    }
+  }
+
+  async getServerLogs(limit = 100) {
+    try {
+      const response = await api.get(`/admin/server-logs?limit=${limit}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get server logs');
+    }
+  }
+
   // Army Training
   async trainArmy(trainingType = 'basic') {
     try {
