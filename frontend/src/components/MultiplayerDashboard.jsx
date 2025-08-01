@@ -392,7 +392,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                               size="sm" 
                               className="bg-red-600 hover:bg-red-700"
                               onClick={() => launchRaid(target)}
-                              disabled={armySize === 0}
+                              disabled={getArmySize() === 0}
                             >
                               Raid
                             </Button>
