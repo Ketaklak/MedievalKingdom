@@ -386,6 +386,197 @@ class MedievalEmpiresAPITester:
             f"Status: {status}, Recruitment success: {data.get('success', False) if isinstance(data, dict) else 'error'}"
         )
     
+    async def test_construction_queue_system(self):
+        """Test construction queue system specifically"""
+        print("\n=== Testing Construction Queue System (User Reported Issue) ===")
+        
+        if not self.auth_token:
+            print("⚠️  Skipping construction queue test - no auth token")
+            return
+        
+        # Test get construction queue
+        success, data, status = await self.make_request("GET", "/game/construction/queue", use_auth=True)
+        self.log_test(
+            "Get Construction Queue (GET /api/game/construction/queue)",
+            success and status == 200,
+            f"Status: {status}, Queue items: {len(data.get('queue', [])) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Test building upgrade to add to construction queue
+        if success and isinstance(data, dict):
+            # Get player buildings first
+            buildings_success, buildings_data, buildings_status = await self.make_request("GET", "/game/player/buildings", use_auth=True)
+            
+            if buildings_success and isinstance(buildings_data, dict):
+                buildings = buildings_data.get('buildings', [])
+                if buildings:
+                    # Try to upgrade first building
+                    first_building = buildings[0]
+                    upgrade_data = {"buildingId": first_building.get("id")}
+                    
+                    upgrade_success, upgrade_response, upgrade_status = await self.make_request(
+                        "POST", "/game/buildings/upgrade", upgrade_data, use_auth=True
+                    )
+                    
+                    self.log_test(
+                        "Start Building Upgrade (POST /api/game/buildings/upgrade)",
+                        upgrade_success and upgrade_status == 200,
+                        f"Status: {upgrade_status}, Success: {upgrade_response.get('success', False) if isinstance(upgrade_response, dict) else 'error'}, Response: {upgrade_response}"
+                    )
+    
+    async def test_chat_message_sending(self):
+        """Test chat message sending specifically"""
+        print("\n=== Testing Chat Message Sending (User Reported Issue) ===")
+        
+        if not self.auth_token:
+            print("⚠️  Skipping chat message sending test - no auth token")
+            return
+        
+        # Test send global message with realistic content
+        message_data = {
+            "content": "Greetings fellow rulers! Our kingdom stands strong and ready for alliance."
+        }
+        
+        success, data, status = await self.make_request("POST", "/chat/global", message_data, use_auth=True)
+        self.log_test(
+            "Send Global Message (POST /api/chat/global)",
+            success and status == 200,
+            f"Status: {status}, Message sent: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Test send private message
+        private_message_data = {
+            "receiver": "admin",
+            "content": "Greetings, mighty ruler! I seek to establish diplomatic relations."
+        }
+        
+        success, data, status = await self.make_request("POST", "/chat/private", private_message_data, use_auth=True)
+        self.log_test(
+            "Send Private Message (POST /api/chat/private)",
+            success and status == 200,
+            f"Status: {status}, Message sent: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+    
+    async def test_trading_system(self):
+        """Test trading system endpoints"""
+        print("\n=== Testing Trading System (User Reported Issue) ===")
+        
+        if not self.auth_token:
+            print("⚠️  Skipping trading system test - no auth token")
+            return
+        
+        # Test create trade offer
+        trade_data = {
+            "offering": {"gold": 100, "wood": 50},
+            "requesting": {"stone": 75, "food": 25},
+            "duration": 3600
+        }
+        
+        success, data, status = await self.make_request("POST", "/diplomacy/trade/create", trade_data, use_auth=True)
+        self.log_test(
+            "Create Trade Offer (POST /api/diplomacy/trade/create)",
+            success and status == 200,
+            f"Status: {status}, Trade created: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Test get trade offers
+        success, data, status = await self.make_request("GET", "/diplomacy/trade/offers", use_auth=True)
+        self.log_test(
+            "Get Trade Offers (GET /api/diplomacy/trade/offers)",
+            success and status == 200,
+            f"Status: {status}, Offers count: {len(data.get('offers', [])) if isinstance(data, dict) else 'error'}"
+        )
+        
+        # Test get my trade offers
+        success, data, status = await self.make_request("GET", "/diplomacy/trade/my-offers", use_auth=True)
+        self.log_test(
+            "Get My Trade Offers (GET /api/diplomacy/trade/my-offers)",
+            success and status == 200,
+            f"Status: {status}, My offers count: {len(data.get('offers', [])) if isinstance(data, dict) else 'error'}"
+        )
+    
+    async def test_alliance_system(self):
+        """Test alliance creation and management"""
+        print("\n=== Testing Alliance System (User Reported Issue) ===")
+        
+        if not self.auth_token:
+            print("⚠️  Skipping alliance system test - no auth token")
+            return
+        
+        # Test create alliance
+        alliance_data = {
+            "name": "Test Warriors Alliance",
+            "description": "A mighty alliance of brave warriors seeking glory and conquest!"
+        }
+        
+        success, data, status = await self.make_request("POST", "/diplomacy/alliance/create", alliance_data, use_auth=True)
+        self.log_test(
+            "Create Alliance (POST /api/diplomacy/alliance/create)",
+            success and status == 200,
+            f"Status: {status}, Alliance created: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Test get alliance list
+        success, data, status = await self.make_request("GET", "/diplomacy/alliance/list")
+        self.log_test(
+            "Get Alliance List (GET /api/diplomacy/alliance/list)",
+            success and status == 200,
+            f"Status: {status}, Alliances count: {len(data.get('alliances', [])) if isinstance(data, dict) else 'error'}"
+        )
+        
+        # Test get my alliance
+        success, data, status = await self.make_request("GET", "/diplomacy/alliance/my", use_auth=True)
+        self.log_test(
+            "Get My Alliance (GET /api/diplomacy/alliance/my)",
+            success and status == 200,
+            f"Status: {status}, My alliance: {data.get('alliance', {}).get('name', 'None') if isinstance(data, dict) else 'error'}"
+        )
+        
+        # Test alliance map
+        success, data, status = await self.make_request("GET", "/diplomacy/alliance/map")
+        self.log_test(
+            "Get Alliance Map (GET /api/diplomacy/alliance/map)",
+            success and status == 200,
+            f"Status: {status}, Map alliances: {len(data.get('alliances', [])) if isinstance(data, dict) else 'error'}"
+        )
+        
+        # Test get alliance invites
+        success, data, status = await self.make_request("GET", "/diplomacy/alliance/invites", use_auth=True)
+        self.log_test(
+            "Get Alliance Invites (GET /api/diplomacy/alliance/invites)",
+            success and status == 200,
+            f"Status: {status}, Invites count: {len(data.get('invites', [])) if isinstance(data, dict) else 'error'}"
+        )
+    
+    async def test_profile_endpoints(self):
+        """Test profile GET and PUT endpoints specifically"""
+        print("\n=== Testing Profile Endpoints (User Reported Issue) ===")
+        
+        if not self.auth_token:
+            print("⚠️  Skipping profile endpoints test - no auth token")
+            return
+        
+        # Test GET profile
+        success, data, status = await self.make_request("GET", "/game/player/profile", use_auth=True)
+        self.log_test(
+            "Get Player Profile (GET /api/game/player/profile)",
+            success and status == 200,
+            f"Status: {status}, Kingdom: {data.get('profile', {}).get('kingdomName', 'unknown') if isinstance(data, dict) else 'error'}"
+        )
+        
+        # Test PUT profile update
+        profile_update = {
+            "bio": "A mighty ruler testing the kingdom's systems",
+            "motto": "Testing brings strength and glory!"
+        }
+        
+        success, data, status = await self.make_request("PUT", "/game/player/profile", profile_update, use_auth=True)
+        self.log_test(
+            "Update Player Profile (PUT /api/game/player/profile)",
+            success and status == 200,
+            f"Status: {status}, Update success: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+
     async def run_all_tests(self):
         """Run all test suites"""
         print("🏰 Medieval Empires Backend API Test Suite")
@@ -403,6 +594,13 @@ class MedievalEmpiresAPITester:
         await self.test_empire_bonuses()
         await self.test_resource_generation()
         await self.test_army_recruitment()
+        
+        # Run specific tests for user-reported issues
+        await self.test_construction_queue_system()
+        await self.test_chat_message_sending()
+        await self.test_trading_system()
+        await self.test_alliance_system()
+        await self.test_profile_endpoints()
         
         # Print summary
         end_time = datetime.now()
