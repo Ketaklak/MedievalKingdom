@@ -612,6 +612,79 @@ class MedievalEmpiresAPITester:
         
         # Restore original token
         self.auth_token = original_token
+    
+    async def test_shop_system(self):
+        """Test shop system endpoints (NEW)"""
+        print("\n=== Testing Shop System (NEW) ===")
+        
+        if not self.admin_token:
+            print("⚠️  Skipping shop system test - no admin token")
+            return
+        
+        # Use admin token for testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
+        
+        # Test get shop items
+        success, data, status = await self.make_request("GET", "/game/shop/items")
+        self.log_test(
+            "Get Shop Items (GET /api/game/shop/items)",
+            success and status == 200,
+            f"Status: {status}, Items count: {len(data.get('items', [])) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Test buy shop item - Resource Pack
+        if success and isinstance(data, dict) and data.get('items'):
+            # Find resource pack item
+            resource_pack = next((item for item in data['items'] if item['id'] == 'resource_pack'), None)
+            if resource_pack:
+                purchase_data = {"quantity": 1}
+                
+                buy_success, buy_response, buy_status = await self.make_request(
+                    "POST", "/game/shop/buy/resource_pack", purchase_data, use_auth=True
+                )
+                
+                self.log_test(
+                    "Buy Resource Pack (POST /api/game/shop/buy/resource_pack)",
+                    buy_success and buy_status == 200,
+                    f"Status: {buy_status}, Purchase success: {buy_response.get('success', False) if isinstance(buy_response, dict) else 'error'}, Response: {buy_response}"
+                )
+        
+        # Test buy shop item - Army Boost
+        if success and isinstance(data, dict) and data.get('items'):
+            # Find army boost item
+            army_boost = next((item for item in data['items'] if item['id'] == 'army_boost'), None)
+            if army_boost:
+                purchase_data = {"quantity": 1}
+                
+                buy_success, buy_response, buy_status = await self.make_request(
+                    "POST", "/game/shop/buy/army_boost", purchase_data, use_auth=True
+                )
+                
+                self.log_test(
+                    "Buy Army Boost (POST /api/game/shop/buy/army_boost)",
+                    buy_success and buy_status == 200,
+                    f"Status: {buy_status}, Purchase success: {buy_response.get('success', False) if isinstance(buy_response, dict) else 'error'}, Response: {buy_response}"
+                )
+        
+        # Test get purchase history
+        success, data, status = await self.make_request("GET", "/game/shop/purchases", use_auth=True)
+        self.log_test(
+            "Get Purchase History (GET /api/game/shop/purchases)",
+            success and status == 200,
+            f"Status: {status}, Purchases count: {len(data.get('purchases', [])) if isinstance(data, dict) else 'error'}"
+        )
+        
+        # Test get player inventory
+        success, data, status = await self.make_request("GET", "/game/shop/inventory", use_auth=True)
+        self.log_test(
+            "Get Player Inventory (GET /api/game/shop/inventory)",
+            success and status == 200,
+            f"Status: {status}, Inventory items: {data.get('inventory', {}) if isinstance(data, dict) else 'error'}"
+        )
+        
+        # Restore original token
+        self.auth_token = original_token
 
     async def run_all_tests(self):
         """Run all test suites"""
