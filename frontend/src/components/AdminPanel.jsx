@@ -507,6 +507,130 @@ const AdminPanel = ({ currentUser }) => {
             </div>
           </TabsContent>
 
+          {/* Admin Tools Tab */}
+          <TabsContent value="tools" className="space-y-6">
+            {/* Broadcast Message */}
+            <Card className="bg-slate-800/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <MessageSquare className="w-5 h-5" />
+                  <span>System Broadcast</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Broadcast Message</Label>
+                    <Textarea
+                      value={broadcastMessage}
+                      onChange={(e) => setBroadcastMessage(e.target.value)}
+                      placeholder="Enter system message to broadcast to all players..."
+                      className="bg-slate-600 border-slate-500"
+                      rows={3}
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleBroadcastMessage}
+                    disabled={!broadcastMessage.trim()}
+                    className="w-full bg-red-600 hover:bg-red-700"
+                  >
+                    Send Broadcast Message
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Player Management Tools */}
+            <Card className="bg-slate-800/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Users className="w-5 h-5" />
+                  <span>Player Management Tools</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Reset Player Resources</Label>
+                    <Select 
+                      value={selectedPlayerForReset || ''} 
+                      onValueChange={setSelectedPlayerForReset}
+                    >
+                      <SelectTrigger className="bg-slate-600 border-slate-500">
+                        <SelectValue placeholder="Select player to reset resources..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {players.map(player => (
+                          <SelectItem key={player.username} value={player.username}>
+                            {player.username} - {player.kingdomName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <Button 
+                    onClick={() => {
+                      if (selectedPlayerForReset) {
+                        if (window.confirm(`Are you sure you want to reset resources for ${selectedPlayerForReset}? This will set their resources to default starting values.`)) {
+                          handleResetPlayerResources(selectedPlayerForReset);
+                          setSelectedPlayerForReset(null);
+                        }
+                      }
+                    }}
+                    disabled={!selectedPlayerForReset}
+                    variant="destructive"
+                    className="w-full"
+                  >
+                    Reset Player Resources
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Server Logs */}
+            <Card className="bg-slate-800/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Terminal className="w-5 h-5" />
+                    <span>Server Logs</span>
+                  </div>
+                  <Badge variant="outline">{serverLogs.length} entries</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-black/50 rounded-lg p-4 font-mono text-sm max-h-64 overflow-y-auto">
+                  {serverLogs.length === 0 ? (
+                    <p className="text-slate-500">No server logs available.</p>
+                  ) : (
+                    serverLogs.map((log, index) => (
+                      <div key={index} className="flex items-start space-x-2 mb-1">
+                        <span className="text-slate-500 text-xs w-20 flex-shrink-0">
+                          {new Date(log.timestamp).toLocaleTimeString()}
+                        </span>
+                        <span className={`w-4 flex-shrink-0 ${
+                          log.level === 'ERROR' ? 'text-red-400' :
+                          log.level === 'WARNING' ? 'text-yellow-400' :
+                          'text-blue-400'
+                        }`}>
+                          {log.level === 'ERROR' ? '🔴' : log.level === 'WARNING' ? '🟡' : '🔵'}
+                        </span>
+                        <span className={`${
+                          log.level === 'ERROR' ? 'text-red-400' :
+                          log.level === 'WARNING' ? 'text-yellow-400' :
+                          'text-slate-300'
+                        }`}>
+                          [{log.source}] {log.message}
+                        </span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* System Info Tab */}
           <TabsContent value="system" className="space-y-6">
             <Card className="bg-slate-800/50 border-slate-700">
