@@ -98,8 +98,9 @@ async def send_private_message(
         
         return {
             "success": True,
-            "message_id": message_id,
-            "message": message
+            "message_id": str(message_id),  # Ensure it's a string
+            "content": content,
+            "receiver": receiver
         }
         
     except HTTPException:
