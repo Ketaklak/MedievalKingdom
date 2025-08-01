@@ -229,12 +229,9 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {buildings.map(building => {
+                    {buildings && buildings.map(building => {
                       const IconComponent = buildingIcons[building.type];
-                      const cost = mockMultiplayerData.getBuildingCost(building.type, building.level + 1);
-                      const canAfford = canAffordBuilding(cost);
-                      const buildTime = mockMultiplayerData.getBuildingTime(building.type, building.level + 1);
-
+                      
                       return (
                         <Card key={building.id} className="bg-slate-700/50 border-slate-600 hover:border-slate-500 transition-colors">
                           <CardContent className="p-4">
@@ -271,20 +268,9 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                               </div>
                             ) : (
                               <div className="space-y-2">
-                                <div className="text-xs text-slate-400">
-                                  Next level cost:
-                                  {Object.entries(cost).map(([resource, amount]) => (
-                                    <span key={resource} className={`ml-2 ${resources[resource] >= amount ? 'text-green-400' : 'text-red-400'}`}>
-                                      {amount} {resource}
-                                    </span>
-                                  ))}
-                                </div>
-                                <div className="text-xs text-slate-400">
-                                  Build time: {formatTime(buildTime)}
-                                </div>
                                 <Button 
                                   onClick={() => startConstruction(building)}
-                                  disabled={!canAfford || building.constructing}
+                                  disabled={building.constructing}
                                   className="w-full bg-amber-600 hover:bg-amber-700 disabled:bg-slate-600"
                                 >
                                   Upgrade to Level {building.level + 1}
