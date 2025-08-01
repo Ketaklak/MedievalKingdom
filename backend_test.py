@@ -711,6 +711,9 @@ class MedievalEmpiresAPITester:
         await self.test_alliance_system()
         await self.test_profile_endpoints()
         
+        # Run new shop system tests
+        await self.test_shop_system()
+        
         # Print summary
         end_time = datetime.now()
         duration = (end_time - start_time).total_seconds()
