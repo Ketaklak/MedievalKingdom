@@ -3,12 +3,12 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 import logging
 
-from ..models.user import UserCreate, UserLogin, UserResponse
-from ..auth.jwt_handler import create_access_token, verify_token
-from ..auth.password import hash_password, verify_password
-from ..database.mongodb import db
-from ..game.empire_bonuses import EmpireBonuses
-from ..game.buildings import BuildingSystem
+from models.user import UserCreate, UserLogin, UserResponse
+from auth.jwt_handler import create_access_token, verify_token
+from auth.password import hash_password, verify_password
+from database.mongodb import db
+from game.empire_bonuses import EmpireBonuses
+from game.buildings import BuildingSystem
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["authentication"])
