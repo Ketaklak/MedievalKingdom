@@ -993,7 +993,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
         </Dialog>
 
         {/* Admin Panel */}
-        {showAdmin && player.username === 'admin' && (
+        {showAdmin && (player.username === 'admin' || player.isAdmin) && (
           <div className="fixed inset-0 z-50 bg-black/80">
             <div className="h-full overflow-y-auto">
               <AdminPanel currentUser={player} />
