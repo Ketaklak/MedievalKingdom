@@ -460,6 +460,10 @@ class ApiService {
       throw new Error(error.response?.data?.detail || 'Failed to buy item');
     }
   }
+
+  async purchaseShopItem(itemId, quantity = 1) {
+    return this.buyShopItem(itemId, quantity);
+  }
   async getServerStatus() {
     try {
       const response = await api.get('/status');
