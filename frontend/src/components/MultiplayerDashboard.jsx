@@ -373,8 +373,23 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                     >
                       Recruit 10 Soldiers (Cost: 500 gold, 300 food)
                     </Button>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                      Train Army (Increase combat effectiveness)
+                    <Button 
+                      onClick={() => handleTrainArmy('basic')}
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                    >
+                      Basic Training (Cost: 100 gold, 50 food)
+                    </Button>
+                    <Button 
+                      onClick={() => handleTrainArmy('advanced')}
+                      className="w-full bg-purple-600 hover:bg-purple-700"
+                    >
+                      Advanced Training (Cost: 250 gold, 150 food, 100 wood)
+                    </Button>
+                    <Button 
+                      onClick={() => handleTrainArmy('elite')}
+                      className="w-full bg-amber-600 hover:bg-amber-700"
+                    >
+                      Elite Training (Cost: 500 gold, 300 food, 200 stone)
                     </Button>
                   </div>
                 </div>
