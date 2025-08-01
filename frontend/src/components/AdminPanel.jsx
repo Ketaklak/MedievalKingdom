@@ -189,6 +189,53 @@ const AdminPanel = ({ currentUser }) => {
     addLogEntry('info', 'Console logs cleared');
   };
 
+  const handleBroadcastMessage = async () => {
+    if (!broadcastMessage.trim()) {
+      toast({
+        title: "Invalid Input",
+        description: "Broadcast message cannot be empty",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await apiService.broadcastMessage(broadcastMessage);
+      toast({
+        title: "Broadcast Sent",
+        description: "System message has been sent to all players",
+      });
+      setBroadcastMessage('');
+      addLogEntry('info', `Broadcast sent: ${broadcastMessage}`);
+    } catch (error) {
+      toast({
+        title: "Broadcast Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+      addLogEntry('error', `Broadcast failed: ${error.message}`);
+    }
+  };
+
+  const handleResetPlayerResources = async (username) => {
+    try {
+      await apiService.resetPlayerResources(username);
+      toast({
+        title: "Resources Reset",
+        description: `Resources have been reset for ${username}`,
+      });
+      addLogEntry('info', `Resources reset for player: ${username}`);
+      loadData(); // Refresh data
+    } catch (error) {
+      toast({
+        title: "Reset Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+      addLogEntry('error', `Failed to reset resources for ${username}: ${error.message}`);
+    }
+  };
+
   const getLogLevelColor = (level) => {
     const colors = {
       info: 'text-blue-400',
