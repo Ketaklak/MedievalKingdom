@@ -13,6 +13,7 @@ import { useToast } from '../hooks/use-toast';
 
 const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState({
     kingdomName: player?.kingdomName || '',
     bio: player?.bio || '',
@@ -20,28 +21,46 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
     motto: player?.motto || '',
     empire: player?.empire || 'norman'
   });
+  const { toast } = useToast();
 
-  const handleSave = () => {
-    // Update player profile
+  useEffect(() => {
     if (player) {
-      const playerData = mockMultiplayerData.players[player.username];
-      if (playerData) {
-        playerData.kingdomName = profileData.kingdomName;
-        playerData.bio = profileData.bio;
-        playerData.location = profileData.location;
-        playerData.motto = profileData.motto;
-        playerData.empire = profileData.empire;
-        mockMultiplayerData.saveData();
-        onUpdate && onUpdate(playerData);
-      }
+      setProfileData({
+        kingdomName: player.kingdomName || '',
+        bio: player.bio || '',
+        location: player.location || '',
+        motto: player.motto || '',
+        empire: player.empire || 'norman'
+      });
     }
-    setEditMode(false);
+  }, [player]);
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      await apiService.updatePlayerProfile(profileData);
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been updated successfully!",
+      });
+      if (onUpdate) {
+        onUpdate({ ...player, ...profileData });
+      }
+      setEditMode(false);
+    } catch (error) {
+      toast({
+        title: "Update Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const calculateStats = () => {
     if (!player) return {};
     
-    const power = mockMultiplayerData.calculatePlayerPower(player.username);
     const buildingLevels = player.buildings?.reduce((sum, building) => sum + building.level, 0) || 0;
     const totalResources = Object.values(player.resources || {}).reduce((sum, amount) => sum + amount, 0);
     
@@ -56,11 +75,11 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
     }
     
     return {
-      power,
+      power: player.power || 0,
       buildingLevels,
       totalResources,
       army: armySize,
-      joinDate: new Date(2024, 0, 1).toLocaleDateString(), // Mock join date
+      joinDate: new Date(2024, 0, 1).toLocaleDateString(), // Mock join date for now
       lastActive: new Date(player.lastActive || Date.now()).toLocaleDateString()
     };
   };
@@ -76,10 +95,22 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
     return empires[empire] || empires.norman;
   };
 
+  const getEmpireBonus = (empire) => {
+    const bonuses = {
+      norman: { gold: 25, stone: 20 },
+      viking: { wood: 30, food: 15 },
+      saxon: { stone: 25, gold: 15 },
+      celtic: { food: 25, wood: 20 },
+      frankish: { gold: 20, food: 25 }
+    };
+    return bonuses[empire] || bonuses.norman;
+  };
+
   if (!player) return null;
 
   const stats = calculateStats();
   const empireInfo = getEmpireInfo(player.empire);
+  const empireBonus = getEmpireBonus(player.empire);
   const IconComponent = empireInfo.icon;
 
   return (
@@ -99,10 +130,14 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
             <div className="flex space-x-2">
               {editMode ? (
                 <>
-                  <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
-                    Save Changes
+                  <Button 
+                    onClick={handleSave} 
+                    className="bg-green-600 hover:bg-green-700"
+                    disabled={loading}
+                  >
+                    {loading ? 'Saving...' : 'Save Changes'}
                   </Button>
-                  <Button variant="outline" onClick={() => setEditMode(false)}>
+                  <Button variant="outline" onClick={() => setEditMode(false)} disabled={loading}>
                     Cancel
                   </Button>
                 </>
@@ -132,6 +167,7 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
                         value={profileData.kingdomName}
                         onChange={(e) => setProfileData({...profileData, kingdomName: e.target.value})}
                         className="bg-slate-600 border-slate-500"
+                        disabled={loading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -139,6 +175,7 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
                       <Select 
                         value={profileData.empire} 
                         onValueChange={(value) => setProfileData({...profileData, empire: value})}
+                        disabled={loading}
                       >
                         <SelectTrigger className="bg-slate-600 border-slate-500">
                           <SelectValue />
@@ -160,6 +197,7 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
                         placeholder="Tell us about your kingdom..."
                         className="bg-slate-600 border-slate-500"
                         rows={4}
+                        disabled={loading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -169,6 +207,7 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
                         onChange={(e) => setProfileData({...profileData, location: e.target.value})}
                         placeholder="Your location..."
                         className="bg-slate-600 border-slate-500"
+                        disabled={loading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -178,6 +217,7 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
                         onChange={(e) => setProfileData({...profileData, motto: e.target.value})}
                         placeholder="Your kingdom's motto..."
                         className="bg-slate-600 border-slate-500"
+                        disabled={loading}
                       />
                     </div>
                   </>
@@ -260,7 +300,7 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {Object.entries(mockMultiplayerData.getEmpireBonus(player.empire)).map(([resource, bonus]) => (
+                  {Object.entries(empireBonus).map(([resource, bonus]) => (
                     <div key={resource} className="flex justify-between">
                       <span className="capitalize text-slate-400">{resource}:</span>
                       <span className="text-green-400">+{bonus}%</span>
