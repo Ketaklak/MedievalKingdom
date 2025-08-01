@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -8,7 +8,8 @@ import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { User, Crown, Shield, Sword, Calendar, MapPin } from 'lucide-react';
-import { mockMultiplayerData } from '../utils/mockMultiplayerData';
+import apiService from '../services/apiService';
+import { useToast } from '../hooks/use-toast';
 
 const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
   const [editMode, setEditMode] = useState(false);
