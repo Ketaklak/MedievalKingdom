@@ -134,11 +134,11 @@ backend:
 
   - task: "Chat Message Sending"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/routes/chat.py"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "testing"
@@ -146,6 +146,9 @@ backend:
         - working: false
           agent: "user"
           comment: "User reports chat still shows 'failed to send message' error"
+        - working: true
+          agent: "testing"
+          comment: "RESOLVED: Chat message sending (POST /api/chat/global) now works correctly. ObjectId serialization fixed - message_id properly returned as string. Tested with admin credentials and message was successfully sent and verified in chat history. Response: {'success': True, 'message_id': '688c98d23491a24f4f808b4e', 'content': 'Test message', 'username': 'admin'}"
 
   - task: "Trading System"
     implemented: false
