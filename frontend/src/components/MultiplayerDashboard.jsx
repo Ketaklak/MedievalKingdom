@@ -41,6 +41,10 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
   const [showShop, setShowShop] = useState(false);
   const [showCreateAlliance, setShowCreateAlliance] = useState(false);
   const [showCreateTrade, setShowCreateTrade] = useState(false);
+  const [myAlliance, setMyAlliance] = useState(null);
+  const [tradeOffers, setTradeOffers] = useState([]);
+  const [myTradeOffers, setMyTradeOffers] = useState([]);
+  const [alliances, setAlliances] = useState([]);
   const [allianceFormData, setAllianceFormData] = useState({ name: '', description: '' });
   const [tradeFormData, setTradeFormData] = useState({
     offering: { gold: 0, wood: 0, stone: 0, food: 0 },
