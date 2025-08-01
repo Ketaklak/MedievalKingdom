@@ -539,7 +539,10 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <Button className="w-full bg-green-600 hover:bg-green-700">
+                  <Button 
+                    className="w-full bg-green-600 hover:bg-green-700"
+                    onClick={() => setShowCreateTrade(true)}
+                  >
                     Create Trade Offer
                   </Button>
                   <div className="space-y-3">
