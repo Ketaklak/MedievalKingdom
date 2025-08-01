@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the fully repaired Medieval Empires backend system with complete backend testing including health endpoints, authentication, game features, chat system, and admin functions."
+user_problem_statement: "Fix critical bugs reported by user: construction queue not working, trading not working, no alliance map, alliance creation broken, profile access error 'Objects are not valid as a React child (found: object with keys {soldiers, archers, cavalry})', chat failing to send messages, admin panel needs more features, and add console for logs/errors debugging."
 
 backend:
   - task: "Health Check Endpoint"
@@ -116,6 +116,72 @@ backend:
         - working: true
           agent: "testing"
           comment: "Health check endpoint (GET /api/) working perfectly. Returns status 200 with proper response: {'message': 'Medieval Empires API is running!', 'status': 'healthy', 'version': '1.0.0'}"
+
+  - task: "Construction Queue System"
+    implemented: true
+    working: false
+    file: "/app/backend/routes/game.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Previous testing showed construction queue working"
+        - working: false
+          agent: "user"
+          comment: "User reports construction queue is not working - needs investigation"
+
+  - task: "Chat Message Sending"
+    implemented: true
+    working: false
+    file: "/app/backend/routes/chat.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Previous testing showed chat working"
+        - working: false
+          agent: "user"
+          comment: "User reports chat still shows 'failed to send message' error"
+
+  - task: "Trading System"
+    implemented: false
+    working: false
+    file: "/app/backend/routes/diplomacy.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reports trading system not working - needs implementation"
+
+  - task: "Alliance Creation System"
+    implemented: false
+    working: false
+    file: "/app/backend/routes/diplomacy.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reports alliance creation is impossible - needs implementation"
+
+  - task: "Alliance Map System"
+    implemented: false
+    working: false
+    file: "/app/backend/routes/diplomacy.py"
+    stuck_count: 1
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reports no alliance map - needs implementation"
 
   - task: "Server Status Endpoint"
     implemented: true
