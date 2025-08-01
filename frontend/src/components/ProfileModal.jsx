@@ -38,6 +38,27 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
   const handleSave = async () => {
     setLoading(true);
     try {
+      // Check if race change is attempted and if player has scrolls
+      if (profileData.empire !== player.empire) {
+        const raceChangeScrolls = player.raceChangeScrolls || 0;
+        if (raceChangeScrolls <= 0) {
+          toast({
+            title: "Race Change Restricted",
+            description: "You need a Race Change Scroll to change your empire. Visit the Shop to purchase one.",
+            variant: "destructive"
+          });
+          setLoading(false);
+          return;
+        }
+        
+        // Confirm race change
+        const confirmed = window.confirm(`Are you sure you want to change your empire from ${player.empire} to ${profileData.empire}? This will consume one Race Change Scroll.`);
+        if (!confirmed) {
+          setLoading(false);
+          return;
+        }
+      }
+
       await apiService.updatePlayerProfile(profileData);
       toast({
         title: "Profile Updated",
