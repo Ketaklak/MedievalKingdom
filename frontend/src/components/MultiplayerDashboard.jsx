@@ -277,9 +277,13 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
   };
 
   const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
+    if (seconds === undefined || seconds === null || isNaN(seconds)) {
+      return "00:00:00";
+    }
+    const numSeconds = Math.max(0, Math.floor(seconds));
+    const hours = Math.floor(numSeconds / 3600);
+    const minutes = Math.floor((numSeconds % 3600) / 60);
+    const secs = numSeconds % 60;
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
