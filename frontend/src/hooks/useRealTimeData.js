@@ -15,24 +15,39 @@ export const useRealTimeData = (player) => {
     try {
       setError(null);
       
-      // Fetch all game data
+      // Fetch all game data with individual error handling
+      const fetchWithFallback = async (fetchFn, fallback) => {
+        try {
+          return await fetchFn();
+        } catch (err) {
+          console.warn('API call failed, using fallback:', err.message);
+          return fallback;
+        }
+      };
+
       const [resourcesData, buildingsData, queueData, armyData] = await Promise.all([
-        apiService.getPlayerResources(),
-        apiService.getPlayerBuildings(),
-        apiService.getConstructionQueue(),
-        apiService.getPlayerArmy()
+        fetchWithFallback(() => apiService.getPlayerResources(), { resources: { gold: 0, wood: 0, stone: 0, food: 0 } }),
+        fetchWithFallback(() => apiService.getPlayerBuildings(), { buildings: [] }),
+        fetchWithFallback(() => apiService.getConstructionQueue(), { queue: [] }),
+        fetchWithFallback(() => apiService.getPlayerArmy(), { army: { soldiers: 0, archers: 0, cavalry: 0 } })
       ]);
 
-      setResources(resourcesData.resources);
-      setBuildings(buildingsData.buildings);
+      setResources(resourcesData.resources || { gold: 0, wood: 0, stone: 0, food: 0 });
+      setBuildings(buildingsData.buildings || []);
       setConstructionQueue(queueData.queue || []);
-      setArmy(armyData.army);
+      setArmy(armyData.army || { soldiers: 0, archers: 0, cavalry: 0 });
       setLoading(false);
       
     } catch (err) {
       console.error('Failed to fetch game data:', err);
       setError(err.message);
       setLoading(false);
+      
+      // Set default values to prevent frontend crashes
+      setResources({ gold: 0, wood: 0, stone: 0, food: 0 });
+      setBuildings([]);
+      setConstructionQueue([]);
+      setArmy({ soldiers: 0, archers: 0, cavalry: 0 });
     }
   }, [player]);
 
