@@ -198,6 +198,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
         setShowCreateAlliance(false);
         setAllianceFormData({ name: '', description: '' });
         refetch(); // Refresh data
+        loadDiplomacyData(); // Reload diplomacy data
       }
     } catch (error) {
       toast({
