@@ -33,17 +33,14 @@ async def send_global_message(
             "messageType": "global"
         }
         
-        # Debug logging
-        logger.info(f"Attempting to send message: {message}")
-        logger.info(f"Database object: {db}")
-        logger.info(f"Database client: {db.client}")
-        
         message_id = await db.add_chat_message(message)
         
+        # Return response with proper string serialization
         return {
             "success": True,
-            "message_id": message_id,
-            "message": message
+            "message_id": str(message_id),  # Ensure it's a string
+            "content": content,
+            "username": player["username"]
         }
         
     except HTTPException:
