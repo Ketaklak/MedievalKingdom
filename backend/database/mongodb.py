@@ -110,6 +110,8 @@ class MongoDB:
             user = await self.db.users.find_one({"_id": ObjectId(user_id)})
             if user:
                 user['id'] = str(user['_id'])
+                # Remove the _id field to avoid serialization issues
+                del user['_id']
             return user
         except Exception as e:
             logger.error(f"Failed to get user by ID: {e}")
