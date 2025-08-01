@@ -448,17 +448,83 @@ backend:
           comment: "AI players system working perfectly. 2 AI players are present in the system and appear in nearby players, leaderboard, and online users lists."
 
 frontend:
-  - task: "Admin Login System"
+  - task: "Profile Modal React Error Fix"
     implemented: true
     working: true
-    file: "/app/frontend/src/components/AuthScreen.jsx"
+    file: "/app/frontend/src/components/ProfileModal.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reports React error 'Objects are not valid as a React child (found: object with keys {soldiers, archers, cavalry})' when accessing profile"
+        - working: true
+          agent: "main"
+          comment: "Fixed army object rendering in ProfileModal.jsx by properly calculating total army size from object values"
+
+  - task: "Profile Backend Integration"  
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/ProfileModal.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "main"
+          comment: "ProfileModal still uses mockMultiplayerData - needs backend integration"
+
+  - task: "Trading System Frontend"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/MultiplayerDashboard.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reports trading system not working - frontend needs implementation"
+
+  - task: "Alliance Creation Frontend"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/MultiplayerDashboard.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reports alliance creation impossible - frontend needs implementation"
+
+  - task: "Construction Queue Display"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/components/MultiplayerDashboard.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
     status_history:
         - working: true
           agent: "testing"
-          comment: "Admin login working perfectly with admin/admin credentials. Successfully authenticates and redirects to dashboard. No login errors detected."
+          comment: "Previous testing showed construction queue working"
+        - working: false
+          agent: "user"
+          comment: "User reports construction queue not working - needs investigation"
+
+  - task: "Console for Logs/Errors"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/MultiplayerDashboard.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User requests console for all logs/errors for easier debugging"
 
   - task: "Resource Display System"
     implemented: true
