@@ -33,6 +33,11 @@ async def send_global_message(
             "messageType": "global"
         }
         
+        # Debug logging
+        logger.info(f"Attempting to send message: {message}")
+        logger.info(f"Database object: {db}")
+        logger.info(f"Database client: {db.client}")
+        
         message_id = await db.add_chat_message(message)
         
         return {
@@ -45,6 +50,8 @@ async def send_global_message(
         raise
     except Exception as e:
         logger.error(f"Failed to send global message: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail="Failed to send message")
 
 @router.get("/global", response_model=dict)
