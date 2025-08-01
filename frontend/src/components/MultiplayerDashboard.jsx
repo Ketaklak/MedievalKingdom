@@ -20,6 +20,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
     army, 
     loading, 
     error,
+    refetch,
     upgradeBuilding,
     recruitSoldiers,
     launchRaid
