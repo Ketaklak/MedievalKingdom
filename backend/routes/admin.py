@@ -24,7 +24,7 @@ async def get_admin_stats(current_user: dict = Depends(require_admin)):
     """Get admin dashboard statistics"""
     try:
         stats = await db.get_game_stats()
-        return {"stats": stats}
+        return stats  # Return stats directly instead of wrapping in {"stats": stats}
     except Exception as e:
         logger.error(f"Failed to get admin stats: {e}")
         raise HTTPException(status_code=500, detail="Failed to get statistics")
