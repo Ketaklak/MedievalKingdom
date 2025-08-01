@@ -598,6 +598,7 @@ class MedievalEmpiresAPITester:
         
         # Test PUT profile update
         profile_update = {
+            "username": "admin",  # Required field
             "bio": "A mighty ruler testing the kingdom's systems",
             "motto": "Testing brings strength and glory!"
         }
