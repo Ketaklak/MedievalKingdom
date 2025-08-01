@@ -186,7 +186,6 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {Object.entries(resources).map(([resourceType, amount]) => {
           const IconComponent = resourceIcons[resourceType];
-          const bonus = empireBonus[resourceType] || 0;
           return (
             <Card key={resourceType} className="bg-slate-800/50 border-slate-700 backdrop-blur-sm">
               <CardContent className="p-4">
