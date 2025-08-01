@@ -8,9 +8,12 @@ import { Crown, Sword, Shield, Zap, Users, Coins } from 'lucide-react';
 
 const AuthScreen = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
+    email: '',
     kingdomName: '',
     empire: 'norman'
   });
