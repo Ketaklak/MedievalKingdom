@@ -13,7 +13,7 @@ class CombatSystem:
         defender_power = cls.calculate_battle_power(defender_data)
         
         # Apply empire bonuses
-        from .empire_bonuses import EmpireBonuses
+        from game.empire_bonuses import EmpireBonuses
         attacker_empire = attacker_data.get("empire", "norman")
         defender_empire = defender_data.get("empire", "norman")
         
