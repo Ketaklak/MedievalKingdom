@@ -94,18 +94,20 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
     }
   };
 
-  const handleRecruitSoldiers = async () => {
+  const handleTrainArmy = async (trainingType = 'basic') => {
     try {
-      const result = await recruitSoldiers('soldiers', 10);
+      const result = await apiService.trainArmy(trainingType);
       if (result.success) {
         toast({
-          title: "Soldiers Recruited",
-          description: "10 soldiers have joined your army",
+          title: "Army Training Complete",
+          description: `${result.message}. Experience gained: ${result.experience_gained}`,
         });
+        // Refresh data
+        await fetchGameData();
       }
     } catch (error) {
       toast({
-        title: "Recruitment Failed",
+        title: "Training Failed",
         description: error.message,
         variant: "destructive"
       });
