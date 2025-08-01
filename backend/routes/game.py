@@ -188,7 +188,76 @@ async def recruit_soldiers(
         logger.error(f"Failed to recruit soldiers: {e}")
         raise HTTPException(status_code=500, detail="Failed to recruit soldiers")
 
-@router.post("/combat/raid")
+@router.post("/army/train")
+async def train_army(
+    training_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Train army to increase combat effectiveness"""
+    try:
+        player = current_user["player"]
+        training_type = training_data.get("type", "basic")  # basic, advanced, elite
+        
+        # Training costs
+        training_costs = {
+            "basic": {"gold": 100, "food": 50},
+            "advanced": {"gold": 250, "food": 150, "wood": 100},
+            "elite": {"gold": 500, "food": 300, "stone": 200}
+        }
+        
+        if training_type not in training_costs:
+            raise HTTPException(status_code=400, detail="Invalid training type")
+        
+        cost = training_costs[training_type]
+        
+        # Check if player can afford
+        for resource, amount in cost.items():
+            if player["resources"].get(resource, 0) < amount:
+                raise HTTPException(status_code=400, detail=f"Insufficient {resource}")
+        
+        # Check if player has army to train
+        army_size = sum(player["army"].values())
+        if army_size == 0:
+            raise HTTPException(status_code=400, detail="No army to train")
+        
+        # Deduct resources
+        new_resources = player["resources"].copy()
+        for resource, amount in cost.items():
+            new_resources[resource] -= amount
+        
+        # Add training experience/level to player (stored in a new field)
+        current_training = player.get("armyTraining", {"level": 1, "experience": 0})
+        
+        # Add experience based on training type
+        exp_gain = {"basic": 10, "advanced": 25, "elite": 50}[training_type]
+        current_training["experience"] += exp_gain
+        
+        # Level up if enough experience
+        exp_needed = current_training["level"] * 100
+        while current_training["experience"] >= exp_needed:
+            current_training["experience"] -= exp_needed
+            current_training["level"] += 1
+            exp_needed = current_training["level"] * 100
+        
+        # Update database
+        await db.update_player(player["username"], {
+            "resources": new_resources,
+            "armyTraining": current_training
+        })
+        
+        return {
+            "success": True,
+            "message": f"Army trained with {training_type} training",
+            "new_resources": new_resources,
+            "army_training": current_training,
+            "experience_gained": exp_gain
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to train army: {e}")
+        raise HTTPException(status_code=500, detail="Failed to train army")
 async def launch_raid(
     raid_data: dict,
     current_user: dict = Depends(get_current_user)
