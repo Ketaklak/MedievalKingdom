@@ -322,7 +322,144 @@ class ApiService {
     }
   }
 
-  // Utility
+  // Army Training
+  async trainArmy(trainingType = 'basic') {
+    try {
+      const response = await api.post('/game/army/train', { type: trainingType });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to train army');
+    }
+  }
+
+  // Diplomacy - Trade System
+  async createTradeOffer(offering, requesting, duration = 3600) {
+    try {
+      const response = await api.post('/diplomacy/trade/create', { offering, requesting, duration });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to create trade offer');
+    }
+  }
+
+  async getTradeOffers() {
+    try {
+      const response = await api.get('/diplomacy/trade/offers');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get trade offers');
+    }
+  }
+
+  async getMyTradeOffers() {
+    try {
+      const response = await api.get('/diplomacy/trade/my-offers');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get my trade offers');
+    }
+  }
+
+  async acceptTradeOffer(offerId) {
+    try {
+      const response = await api.post(`/diplomacy/trade/accept/${offerId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to accept trade');
+    }
+  }
+
+  // Alliance System
+  async createAlliance(name, description) {
+    try {
+      const response = await api.post('/diplomacy/alliance/create', { name, description });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to create alliance');
+    }
+  }
+
+  async getAlliances() {
+    try {
+      const response = await api.get('/diplomacy/alliance/list');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get alliances');
+    }
+  }
+
+  async getMyAlliance() {
+    try {
+      const response = await api.get('/diplomacy/alliance/my');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get my alliance');
+    }
+  }
+
+  async inviteToAlliance(username) {
+    try {
+      const response = await api.post('/diplomacy/alliance/invite', { username });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to send invitation');
+    }
+  }
+
+  async getAllianceInvites() {
+    try {
+      const response = await api.get('/diplomacy/alliance/invites');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get alliance invites');
+    }
+  }
+
+  async acceptAllianceInvite(inviteId) {
+    try {
+      const response = await api.post(`/diplomacy/alliance/accept/${inviteId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to accept invitation');
+    }
+  }
+
+  async leaveAlliance() {
+    try {
+      const response = await api.post('/diplomacy/alliance/leave');
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to leave alliance');
+    }
+  }
+
+  async getAllianceMap() {
+    try {
+      const response = await api.get('/diplomacy/alliance/map');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get alliance map');
+    }
+  }
+
+  // Shop System
+  async getShopItems() {
+    try {
+      const response = await api.get('/game/shop/items');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to get shop items');
+    }
+  }
+
+  async buyShopItem(itemId, quantity = 1) {
+    try {
+      const response = await api.post(`/game/shop/buy/${itemId}`, { quantity });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to buy item');
+    }
+  }
   async getServerStatus() {
     try {
       const response = await api.get('/status');
