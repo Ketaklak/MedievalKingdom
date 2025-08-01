@@ -344,7 +344,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
             <Coins className="w-4 h-4 mr-2" />
             Shop
           </Button>
-          {player.username === 'admin' && (
+          {(player.username === 'admin' || player.isAdmin) && (
             <Button onClick={() => setShowAdmin(true)} variant="destructive">
               <Settings className="w-4 h-4 mr-2" />
               Admin Panel
