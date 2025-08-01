@@ -170,6 +170,9 @@ backend:
         - working: true
           agent: "testing"
           comment: "Trade offer creation now works correctly with proper datetime and ID serialization"
+        - working: true
+          agent: "testing"
+          comment: "Trading system fully functional. POST /api/diplomacy/trade/create successfully creates trade offers with proper datetime serialization (ISO format). GET endpoints for trade offers and my trade offers working correctly. All serialization issues resolved."
 
   - task: "Shop System"
     implemented: true
