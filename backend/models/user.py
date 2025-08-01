@@ -9,7 +9,7 @@ class UserCreate(BaseModel):
     password: str = Field(..., min_length=6)
     email: Optional[EmailStr] = None
     kingdomName: str = Field(..., min_length=3, max_length=50)
-    empire: str = Field(..., regex=r'^(norman|viking|saxon|celtic|frankish)$')
+    empire: str = Field(..., pattern=r'^(norman|viking|saxon|celtic|frankish)$')
 
 class UserLogin(BaseModel):
     username: str
