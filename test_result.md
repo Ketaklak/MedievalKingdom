@@ -705,9 +705,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Complete Frontend Testing"
+    - "Shop System"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
@@ -715,3 +715,5 @@ agent_communication:
       message: "CRITICAL BUGS FIXED SUCCESSFULLY: 1) Fixed React child error in ProfileModal by properly calculating total army size from object values ✅ 2) Fixed ObjectId serialization error in chat message sending by returning string IDs ✅ 3) Fixed datetime serialization errors in trading system by converting to ISO format strings ✅ 4) Fixed datetime and ObjectId serialization errors in alliance creation ✅ 5) All 3 major backend endpoints now working correctly. Construction queue needs investigation next."
     - agent: "testing"
       message: "CRITICAL ENDPOINTS TESTING COMPLETE - ALL 3 ISSUES RESOLVED: Tested the specific 3 critical endpoints that were failing with ObjectId and datetime serialization errors. 1) Chat message sending (POST /api/chat/global) - ✅ WORKING: Messages send successfully with proper string ID serialization. 2) Trade offer creation (POST /api/diplomacy/trade/create) - ✅ WORKING: Trade offers create successfully with proper string IDs and ISO datetime serialization. 3) Alliance creation (POST /api/diplomacy/alliance/create) - ✅ WORKING: Alliance creation works with proper validation and serialization. All ObjectId and datetime serialization issues have been RESOLVED. The backend APIs are now properly returning string IDs and ISO format dates as required."
+    - agent: "testing"
+      message: "SHOP SYSTEM AND SERIALIZATION FIXES VERIFIED: ✅ NEW SHOP SYSTEM FULLY FUNCTIONAL: 1) GET /api/game/shop/items returns 4 shop items correctly 2) POST /api/game/shop/buy/{item_id} successfully purchases items with proper resource deduction and inventory updates 3) Purchase history and inventory endpoints working ✅ PREVIOUSLY FIXED SYSTEMS CONFIRMED WORKING: 1) Alliance creation system working with proper validation and serialization 2) Trade creation system working with proper datetime serialization 3) Chat message sending working with proper string ID serialization. All requested systems are now fully operational."
