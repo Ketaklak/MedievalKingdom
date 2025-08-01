@@ -667,11 +667,11 @@ const AdminPanel = ({ currentUser }) => {
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm text-slate-400">CPU Usage</p>
-                    <p className="text-white">{systemInfo.cpuUsage || 'N/A'}</p>
+                    <p className="text-white">{typeof systemInfo.cpuUsage === 'string' ? systemInfo.cpuUsage : 'N/A'}</p>
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm text-slate-400">Memory Usage</p>
-                    <p className="text-white">{systemInfo.memoryUsage || 'N/A'}</p>
+                    <p className="text-white">{typeof systemInfo.memoryUsage === 'string' ? systemInfo.memoryUsage : 'N/A'}</p>
                   </div>
                 </div>
               </CardContent>
