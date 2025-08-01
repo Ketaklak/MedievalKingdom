@@ -328,7 +328,7 @@ const AdminPanel = ({ currentUser }) => {
                   <CardTitle className="text-sm font-medium text-slate-400">Total Power</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-purple-400">{(stats.totalPower || 0).toLocaleString()}</div>
+                  <div className="text-2xl font-bold text-purple-400">{(stats?.totalPower || 0).toLocaleString()}</div>
                 </CardContent>
               </Card>
             </div>
