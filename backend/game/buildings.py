@@ -105,7 +105,7 @@ class BuildingSystem:
     @classmethod
     def calculate_resource_generation(cls, buildings: List[Dict], empire: str) -> Dict[str, float]:
         """Calculate total resource generation per second"""
-        from .empire_bonuses import EmpireBonuses
+        from game.empire_bonuses import EmpireBonuses
         
         generation = {"gold": 0, "wood": 0, "stone": 0, "food": 0}
         
