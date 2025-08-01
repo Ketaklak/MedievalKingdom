@@ -380,6 +380,17 @@ const AdminPanel = ({ currentUser }) => {
                               >
                                 <Edit className="w-4 h-4" />
                               </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => {
+                                  if (window.confirm(`Reset resources for ${player.username}?`)) {
+                                    handleResetPlayerResources(player.username);
+                                  }
+                                }}
+                              >
+                                Reset
+                              </Button>
                             </div>
                           </TableCell>
                         </TableRow>
