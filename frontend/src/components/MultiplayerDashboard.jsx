@@ -245,6 +245,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
           duration: 3600
         });
         refetch(); // Refresh data
+        loadDiplomacyData(); // Reload diplomacy data
       }
     } catch (error) {
       toast({
