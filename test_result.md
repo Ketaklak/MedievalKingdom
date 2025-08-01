@@ -151,16 +151,19 @@ backend:
           comment: "RESOLVED: Chat message sending (POST /api/chat/global) now works correctly. ObjectId serialization fixed - message_id properly returned as string. Tested with admin credentials and message was successfully sent and verified in chat history. Response: {'success': True, 'message_id': '688c98d23491a24f4f808b4e', 'content': 'Test message', 'username': 'admin'}"
 
   - task: "Trading System"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/backend/routes/diplomacy.py"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "user"
           comment: "User reports trading system not working - needs implementation"
+        - working: true
+          agent: "testing"
+          comment: "RESOLVED: Trading system (POST /api/diplomacy/trade/create) now works correctly. ObjectId and datetime serialization fixed - trade ID returned as string and dates in ISO format. Tested trade offer creation with admin credentials successfully. Response includes proper serialized trade_offer with string ID and ISO datetime strings. All trade endpoints (create, get offers, get my offers) are functional."
 
   - task: "Alliance Creation System"
     implemented: false
