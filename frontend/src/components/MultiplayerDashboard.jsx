@@ -467,9 +467,9 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {leaderboard.map((player, index) => (
-                  <Card key={player.username} className={`border-slate-600 ${
-                    player.username === player.username ? 'bg-amber-500/10 border-amber-500' : 'bg-slate-700/50'
+                {leaderboard && leaderboard.map((playerEntry, index) => (
+                  <Card key={playerEntry.username} className={`border-slate-600 ${
+                    playerEntry.username === player.username ? 'bg-amber-500/10 border-amber-500' : 'bg-slate-700/50'
                   }`}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
@@ -482,12 +482,12 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                             )}
                           </div>
                           <div>
-                            <h4 className="font-medium">{player.kingdomName}</h4>
-                            <p className="text-sm text-slate-400">{player.empire} Empire</p>
+                            <h4 className="font-medium">{playerEntry.kingdomName}</h4>
+                            <p className="text-sm text-slate-400">{playerEntry.empire} Empire</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold">{player.power.toLocaleString()}</p>
+                          <p className="font-bold">{playerEntry.power?.toLocaleString() || 'N/A'}</p>
                           <p className="text-sm text-slate-400">Power</p>
                         </div>
                       </div>
