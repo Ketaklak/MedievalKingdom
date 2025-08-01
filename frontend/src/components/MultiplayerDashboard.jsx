@@ -283,6 +283,10 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
             <User className="w-4 h-4 mr-2" />
             Profile
           </Button>
+          <Button onClick={() => setShowShop(true)} variant="outline">
+            <Coins className="w-4 h-4 mr-2" />
+            Shop
+          </Button>
           {player.username === 'admin' && (
             <Button onClick={() => setShowAdmin(true)} variant="destructive">
               <Settings className="w-4 h-4 mr-2" />
