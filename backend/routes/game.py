@@ -108,11 +108,17 @@ async def get_construction_queue(current_user: dict = Depends(get_current_user))
     """Get player's construction queue"""
     try:
         player = current_user["player"]
-        queue = await db.get_construction_queue(player["id"])
+        # Use userId field from player data
+        player_id = player.get("userId") or player.get("id") or player.get("_id")
+        if not player_id:
+            return {"queue": []}
+        
+        queue = await db.get_construction_queue(str(player_id))
         return {"queue": queue}
     except Exception as e:
         logger.error(f"Failed to get construction queue: {e}")
-        raise HTTPException(status_code=500, detail="Failed to get construction queue")
+        # Return empty queue instead of throwing error to prevent frontend crashes
+        return {"queue": []}
 
 # Army and Combat
 @router.get("/player/army")
