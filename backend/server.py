@@ -14,6 +14,7 @@ from routes.auth import router as auth_router
 from routes.game import router as game_router
 from routes.chat import router as chat_router
 from routes.admin import router as admin_router
+from routes.diplomacy import router as diplomacy_router
 
 # Load environment variables
 from dotenv import load_dotenv
