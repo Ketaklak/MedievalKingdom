@@ -98,7 +98,14 @@ async def upgrade_building(
         
         return {
             "success": True,
-            "queue_item": queue_item,
+            "queue_item": {
+                "id": queue_item["id"],
+                "buildingType": queue_item["buildingType"],
+                "targetLevel": queue_item["targetLevel"],
+                "startTime": queue_item["startTime"].isoformat(),
+                "completionTime": queue_item["completionTime"].isoformat(),
+                "completed": queue_item["completed"]
+            },
             "new_resources": new_resources
         }
         
