@@ -119,11 +119,11 @@ backend:
 
   - task: "Construction Queue System"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/routes/game.py"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "testing"
@@ -131,6 +131,9 @@ backend:
         - working: false
           agent: "user"
           comment: "User reports construction queue is not working - needs investigation"
+        - working: true
+          agent: "testing"
+          comment: "FIXED: Construction queue system now fully functional. Root cause was ObjectId serialization errors and background task bug. Fixed: 1) ObjectId serialization in queue responses, 2) Player ID lookup in background task completion, 3) Datetime serialization in queue items. Testing shows: GET /api/game/construction/queue returns proper queue items, POST /api/game/buildings/upgrade successfully creates queue items, buildings properly marked as constructing. System working as expected."
 
   - task: "Chat Message Sending"
     implemented: true
