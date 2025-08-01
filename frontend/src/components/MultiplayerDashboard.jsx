@@ -594,6 +594,10 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
           </div>
         </TabsContent>
 
+        <TabsContent value="alliance-map" className="space-y-6">
+          <AllianceMap />
+        </TabsContent>
+
         <TabsContent value="rankings" className="space-y-6">
           <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm">
             <CardHeader>
