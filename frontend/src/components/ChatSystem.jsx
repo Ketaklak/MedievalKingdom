@@ -188,7 +188,7 @@ const ChatSystem = ({ player }) => {
                     className="bg-slate-700 border-slate-600"
                     maxLength={200}
                   />
-                  <Button type="submit" size="sm" className="bg-blue-600 hover:bg-blue-700">
+                  <Button type="submit" size="sm" className="bg-blue-600 hover:bg-blue-700" disabled={loading}>
                     <Send className="w-4 h-4" />
                   </Button>
                 </form>
