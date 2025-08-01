@@ -476,24 +476,31 @@ async def get_system_info(current_user: dict = Depends(require_admin)):
         memory = psutil.virtual_memory()
         disk = psutil.disk_usage('/')
         
-        # Get database stats
-        db_stats = await db.get_game_stats()
+        # Get database connection status
+        try:
+            await db.db.admin.command('ping')
+            db_status = 'connected'
+        except:
+            db_status = 'disconnected'
         
         return {
-            "system": {
-                "cpu_usage": cpu_percent,
-                "memory_usage": memory.percent,
-                "memory_total": memory.total,
-                "memory_available": memory.available,
-                "disk_usage": disk.percent,
-                "disk_total": disk.total,
-                "disk_free": disk.free
-            },
-            "database": db_stats,
-            "server_time": datetime.utcnow(),
-            "uptime": "N/A"  # Could track actual uptime
+            "status": "healthy",
+            "database": db_status,
+            "cpuUsage": f"{cpu_percent:.1f}%",
+            "memoryUsage": f"{memory.percent:.1f}%",
+            "diskUsage": f"{disk.percent:.1f}%",
+            "uptime": "N/A",
+            "serverTime": datetime.utcnow().isoformat()
         }
         
     except Exception as e:
         logger.error(f"Failed to get system info: {e}")
-        raise HTTPException(status_code=500, detail="Failed to get system info")
+        return {
+            "status": "error", 
+            "database": "disconnected",
+            "cpuUsage": "N/A",
+            "memoryUsage": "N/A",
+            "diskUsage": "N/A",
+            "uptime": "N/A",
+            "serverTime": datetime.utcnow().isoformat()
+        }
