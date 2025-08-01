@@ -249,14 +249,6 @@ const AuthScreen = ({ onLogin }) => {
                       {isLogin ? "Don't have a kingdom? Create one" : "Already have a kingdom? Enter here"}
                     </button>
                   </div>
-                  
-                  {isLogin && (
-                    <div className="text-center">
-                      <p className="text-sm text-slate-400">
-                        Demo Admin: username "admin", password "admin"
-                      </p>
-                    </div>
-                  )}
                 </div>
               </form>
             </CardContent>
