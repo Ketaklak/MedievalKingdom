@@ -10,26 +10,42 @@ import apiService from '../services/apiService';
 import { useToast } from '../hooks/use-toast';
 
 const ChatSystem = ({ player }) => {
-  const [globalMessages, setGlobalMessages] = useState(mockChatData.getGlobalMessages());
-  const [privateMessages, setPrivateMessages] = useState(mockChatData.getPrivateMessages(player.username));
-  const [onlineUsers, setOnlineUsers] = useState(mockChatData.getOnlineUsers());
+  const [globalMessages, setGlobalMessages] = useState([]);
+  const [privateMessages, setPrivateMessages] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [selectedPrivateUser, setSelectedPrivateUser] = useState(null);
   const [newPrivateMessage, setNewPrivateMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   
   const globalChatRef = useRef(null);
   const privateChatRef = useRef(null);
+  const { toast } = useToast();
 
-  // Update messages periodically
+  // Fetch chat data
+  const fetchChatData = async () => {
+    try {
+      const [globalData, privateData, usersData] = await Promise.all([
+        apiService.getGlobalMessages(),
+        apiService.getPrivateMessages(),
+        apiService.getOnlineUsers()
+      ]);
+      
+      setGlobalMessages(globalData.messages || []);
+      setPrivateMessages(privateData.messages || []);
+      setOnlineUsers(usersData.users || []);
+    } catch (error) {
+      console.error('Failed to fetch chat data:', error);
+    }
+  };
+
+  // Initial load and periodic updates
   useEffect(() => {
-    const interval = setInterval(() => {
-      setGlobalMessages(mockChatData.getGlobalMessages());
-      setPrivateMessages(mockChatData.getPrivateMessages(player.username));
-      setOnlineUsers(mockChatData.getOnlineUsers());
-    }, 2000);
-
+    fetchChatData();
+    
+    const interval = setInterval(fetchChatData, 5000); // Update every 5 seconds
     return () => clearInterval(interval);
-  }, [player.username]);
+  }, []);
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
@@ -44,21 +60,47 @@ const ChatSystem = ({ player }) => {
     }
   }, [privateMessages]);
 
-  const sendGlobalMessage = (e) => {
+  const sendGlobalMessage = async (e) => {
     e.preventDefault();
-    if (newMessage.trim()) {
-      mockChatData.addGlobalMessage(player.username, newMessage.trim(), player.empire);
-      setNewMessage('');
-      setGlobalMessages(mockChatData.getGlobalMessages());
+    if (newMessage.trim() && !loading) {
+      setLoading(true);
+      try {
+        await apiService.sendGlobalMessage(newMessage.trim());
+        setNewMessage('');
+        // Refresh messages
+        const data = await apiService.getGlobalMessages();
+        setGlobalMessages(data.messages || []);
+      } catch (error) {
+        toast({
+          title: "Failed to send message",
+          description: error.message,
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const sendPrivateMessage = (e) => {
+  const sendPrivateMessage = async (e) => {
     e.preventDefault();
-    if (newPrivateMessage.trim() && selectedPrivateUser) {
-      mockChatData.addPrivateMessage(player.username, selectedPrivateUser.username, newPrivateMessage.trim());
-      setNewPrivateMessage('');
-      setPrivateMessages(mockChatData.getPrivateMessages(player.username));
+    if (newPrivateMessage.trim() && selectedPrivateUser && !loading) {
+      setLoading(true);
+      try {
+        await apiService.sendPrivateMessage(selectedPrivateUser.username, newPrivateMessage.trim());
+        setNewPrivateMessage('');
+        // Refresh private messages
+        const data = await apiService.getPrivateMessages();
+        setPrivateMessages(data.messages || []);
+      } catch (error) {
+        toast({
+          title: "Failed to send private message",
+          description: error.message,
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
