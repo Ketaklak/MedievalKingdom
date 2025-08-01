@@ -609,11 +609,92 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                   >
                     Create Trade Offer
                   </Button>
+                  
+                  {/* My Trade Offers */}
                   <div className="space-y-3">
-                    <h4 className="font-medium">Active Trades</h4>
-                    <div className="text-center text-slate-400 py-4">
-                      No active trades
-                    </div>
+                    <h4 className="font-medium">My Trade Offers</h4>
+                    {myTradeOffers.length === 0 ? (
+                      <div className="text-center text-slate-400 py-2">
+                        No active trade offers
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        {myTradeOffers.map((trade) => (
+                          <Card key={trade.id} className="bg-slate-700/50 border-slate-600">
+                            <CardContent className="p-3">
+                              <div className="flex justify-between items-start">
+                                <div className="space-y-1">
+                                  <div className="text-sm">
+                                    <span className="text-green-400">Offering:</span>
+                                    {Object.entries(trade.offering || {}).map(([resource, amount]) => (
+                                      amount > 0 && <span key={resource} className="ml-2">{amount} {resource}</span>
+                                    ))}
+                                  </div>
+                                  <div className="text-sm">
+                                    <span className="text-amber-400">Requesting:</span>
+                                    {Object.entries(trade.requesting || {}).map(([resource, amount]) => (
+                                      amount > 0 && <span key={resource} className="ml-2">{amount} {resource}</span>
+                                    ))}
+                                  </div>
+                                  <div className="text-xs text-slate-400">
+                                    Expires: {new Date(trade.expiresAt).toLocaleString()}
+                                  </div>
+                                </div>
+                                <Badge variant="outline">My Offer</Badge>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Available Trade Offers */}
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Available Trades</h4>
+                    {tradeOffers.length === 0 ? (
+                      <div className="text-center text-slate-400 py-2">
+                        No trades available
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        {tradeOffers.map((trade) => (
+                          <Card key={trade.id} className="bg-slate-700/50 border-slate-600">
+                            <CardContent className="p-3">
+                              <div className="flex justify-between items-start">
+                                <div className="space-y-1">
+                                  <div className="text-sm font-medium">
+                                    {trade.createdBy} offers:
+                                  </div>
+                                  <div className="text-sm">
+                                    <span className="text-green-400">Offering:</span>
+                                    {Object.entries(trade.offering || {}).map(([resource, amount]) => (
+                                      amount > 0 && <span key={resource} className="ml-2">{amount} {resource}</span>
+                                    ))}
+                                  </div>
+                                  <div className="text-sm">
+                                    <span className="text-amber-400">Requesting:</span>
+                                    {Object.entries(trade.requesting || {}).map(([resource, amount]) => (
+                                      amount > 0 && <span key={resource} className="ml-2">{amount} {resource}</span>
+                                    ))}
+                                  </div>
+                                  <div className="text-xs text-slate-400">
+                                    Expires: {new Date(trade.expiresAt).toLocaleString()}
+                                  </div>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  className="bg-green-600 hover:bg-green-700"
+                                  onClick={() => handleAcceptTrade(trade.id)}
+                                >
+                                  Accept
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
