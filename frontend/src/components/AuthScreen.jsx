@@ -127,6 +127,12 @@ const AuthScreen = ({ onLogin }) => {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="p-3 bg-red-500/20 border border-red-500 rounded-lg text-red-300 text-sm">
+                    {error}
+                  </div>
+                )}
+                
                 <div className="space-y-2">
                   <Label htmlFor="username">Username</Label>
                   <Input
@@ -136,6 +142,7 @@ const AuthScreen = ({ onLogin }) => {
                     placeholder="Enter your username"
                     className="bg-slate-700 border-slate-600"
                     required
+                    disabled={loading}
                   />
                 </div>
 
@@ -149,11 +156,25 @@ const AuthScreen = ({ onLogin }) => {
                     placeholder="Enter your password"
                     className="bg-slate-700 border-slate-600"
                     required
+                    disabled={loading}
                   />
                 </div>
 
                 {!isLogin && (
                   <>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email (Optional)</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        placeholder="Enter your email"
+                        className="bg-slate-700 border-slate-600"
+                        disabled={loading}
+                      />
+                    </div>
+                    
                     <div className="space-y-2">
                       <Label htmlFor="kingdomName">Kingdom Name</Label>
                       <Input
@@ -163,6 +184,7 @@ const AuthScreen = ({ onLogin }) => {
                         placeholder="Name your kingdom"
                         className="bg-slate-700 border-slate-600"
                         required
+                        disabled={loading}
                       />
                     </div>
 
