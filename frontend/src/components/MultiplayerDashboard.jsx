@@ -105,7 +105,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
           description: `${result.message}. Experience gained: ${result.experience_gained}`,
         });
         // Refresh data
-        await fetchGameData();
+        await refetch();
       }
     } catch (error) {
       toast({
