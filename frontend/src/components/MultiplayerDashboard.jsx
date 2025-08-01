@@ -256,8 +256,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                               <p className="text-sm text-slate-400">{building.description}</p>
                               <div className="text-xs text-slate-500">
                                 Production: {building.production && Object.entries(building.production).map(([resource, amount]) => {
-                                  const bonus = empireBonus[resource] || 0;
-                                  const finalAmount = Math.floor(amount * (1 + bonus / 100));
+                                  const finalAmount = Math.floor(amount);
                                   return `+${finalAmount}/s ${resource}`;
                                 }).join(', ')}
                               </div>
