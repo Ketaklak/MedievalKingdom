@@ -492,6 +492,42 @@ backend:
           agent: "testing"
           comment: "AI players system working perfectly. 2 AI players are present in the system and appear in nearby players, leaderboard, and online users lists."
 
+  - task: "Admin Broadcast Message System"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "ADMIN BROADCAST MESSAGE SYSTEM FULLY FUNCTIONAL: POST /api/admin/broadcast-message working perfectly (Status 200). Successfully sends system broadcast messages with proper formatting. Admin can broadcast messages to all players. Response includes success confirmation and message ID."
+
+  - task: "Admin Reset Player Resources System"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "ADMIN RESET PLAYER RESOURCES SYSTEM FULLY FUNCTIONAL: POST /api/admin/reset-player-resources working perfectly (Status 200). Admin can reset any player's resources to default starting values (gold: 1000, wood: 500, stone: 500, food: 500). Proper validation and success confirmation included."
+
+  - task: "Admin Server Logs System"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "ADMIN SERVER LOGS SYSTEM FULLY FUNCTIONAL: GET /api/admin/server-logs working perfectly (Status 200). Returns structured server logs with timestamp, level, message, and source information. Includes configurable limit parameter. Provides essential debugging information for administrators."
+
 frontend:
   - task: "Profile Modal React Error Fix"
     implemented: true
