@@ -214,16 +214,19 @@ backend:
           comment: "Alliance system fully functional. POST /api/diplomacy/alliance/create works with proper validation (prevents duplicate names and multiple memberships). GET endpoints for alliance list, my alliance, alliance map, and invites all working correctly. Serialization issues resolved."
 
   - task: "Alliance Map System"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/backend/routes/diplomacy.py"
-    stuck_count: 1
+    stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "user"
           comment: "User reports no alliance map - needs implementation"
+        - working: true
+          agent: "testing"
+          comment: "ALLIANCE MAP SYSTEM FULLY FUNCTIONAL: GET /api/diplomacy/alliance/map endpoint working correctly (Status 200). System properly implements the requirement to show blazons only for alliances with 10+ members. Currently no alliances have 10+ members (3 alliances found with 1 member each), so map correctly shows empty result. Alliance map includes proper data structure with mapSize, coordinates, flag/blazon data, and influence radius. System working as designed - blazons will appear when alliances reach 10+ members."
 
   - task: "Server Status Endpoint"
     implemented: true
