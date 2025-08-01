@@ -184,7 +184,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
 
       {/* Resources Panel with Empire Bonuses */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        {Object.entries(resources).map(([resourceType, amount]) => {
+        {Object.entries(resources || {}).map(([resourceType, amount]) => {
           const IconComponent = resourceIcons[resourceType];
           return (
             <Card key={resourceType} className="bg-slate-800/50 border-slate-700 backdrop-blur-sm">
@@ -195,7 +195,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                   </div>
                   <div>
                     <p className="text-sm text-slate-400 capitalize">{resourceType}</p>
-                    <p className="text-xl font-bold">{amount.toLocaleString()}</p>
+                    <p className="text-xl font-bold">{(amount || 0).toLocaleString()}</p>
                   </div>
                 </div>
               </CardContent>
