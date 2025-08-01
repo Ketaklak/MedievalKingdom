@@ -369,14 +369,14 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {nearbyPlayers.map(target => (
+                  {nearbyPlayers && nearbyPlayers.map(target => (
                     <Card key={target.username} className="bg-slate-700/50 border-slate-600">
                       <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <div>
                             <h4 className="font-medium">{target.kingdomName}</h4>
                             <div className="flex space-x-2 text-xs text-slate-400">
-                              <span>Power: {target.power.toLocaleString()}</span>
+                              <span>Power: {target.power?.toLocaleString() || 'N/A'}</span>
                               <span>Empire: {target.empire}</span>
                             </div>
                           </div>
@@ -391,7 +391,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                             <Button 
                               size="sm" 
                               className="bg-red-600 hover:bg-red-700"
-                              onClick={() => launchRaid(target)}
+                              onClick={() => handleRaid(target)}
                               disabled={getArmySize() === 0}
                             >
                               Raid
