@@ -166,16 +166,19 @@ backend:
           comment: "RESOLVED: Trading system (POST /api/diplomacy/trade/create) now works correctly. ObjectId and datetime serialization fixed - trade ID returned as string and dates in ISO format. Tested trade offer creation with admin credentials successfully. Response includes proper serialized trade_offer with string ID and ISO datetime strings. All trade endpoints (create, get offers, get my offers) are functional."
 
   - task: "Alliance Creation System"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/backend/routes/diplomacy.py"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "user"
           comment: "User reports alliance creation is impossible - needs implementation"
+        - working: true
+          agent: "testing"
+          comment: "RESOLVED: Alliance creation system (POST /api/diplomacy/alliance/create) now works correctly. ObjectId and datetime serialization fixed - alliance ID returned as string and createdAt in ISO format. Endpoint properly validates user alliance membership and prevents multiple alliance creation. All alliance endpoints (create, list, my alliance, invites) are functional with proper serialization. Tested validation works correctly - returns 400 'Already in an alliance' when appropriate."
 
   - task: "Alliance Map System"
     implemented: false
