@@ -256,6 +256,26 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
     }
   };
 
+  const handleAcceptTrade = async (offerId) => {
+    try {
+      const result = await apiService.acceptTradeOffer(offerId);
+      if (result.success) {
+        toast({
+          title: "Trade Accepted!",
+          description: "The trade has been completed successfully",
+        });
+        loadDiplomacyData(); // Reload trade data
+        refetch(); // Refresh player data
+      }
+    } catch (error) {
+      toast({
+        title: "Trade Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
