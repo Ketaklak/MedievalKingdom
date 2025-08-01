@@ -565,7 +565,10 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  <Button 
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    onClick={() => setShowCreateAlliance(true)}
+                  >
                     Create Alliance
                   </Button>
                   <div className="space-y-3">
