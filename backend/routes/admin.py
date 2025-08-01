@@ -3,9 +3,9 @@ from typing import List
 from datetime import datetime
 import logging
 
-from ..routes.auth import get_current_user
-from ..database.mongodb import db
-from ..models.user import PlayerModification, AdminAction
+from routes.auth import get_current_user
+from database.mongodb import db
+from models.user import PlayerModification, AdminAction
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin", tags=["admin"])
