@@ -654,6 +654,18 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
           }}
         />
 
+        {/* Shop Modal */}
+        <ShopModal 
+          isOpen={showShop} 
+          onClose={() => setShowShop(false)} 
+          player={player}
+          onUpdate={(updatedPlayer) => {
+            // Update current player data
+            Object.assign(player, updatedPlayer);
+            refetch(); // Refresh data
+          }}
+        />
+
         {/* Create Alliance Modal */}
         <Dialog open={showCreateAlliance} onOpenChange={setShowCreateAlliance}>
           <DialogContent className="bg-slate-800 border-slate-700">
