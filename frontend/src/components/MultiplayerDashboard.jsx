@@ -164,7 +164,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
           <div className="flex items-center space-x-4 mt-2">
             <Badge variant="secondary">{player.empire.charAt(0).toUpperCase() + player.empire.slice(1)} Empire</Badge>
             <Badge variant="outline">Power: {calculatePower().toLocaleString()}</Badge>
-            <Badge variant="outline">Army: {armySize}</Badge>
+            <Badge variant="outline">Army: {getArmySize()}</Badge>
           </div>
         </div>
         <div className="flex items-center space-x-2">
