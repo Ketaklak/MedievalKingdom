@@ -24,6 +24,9 @@ const AdminPanel = ({ currentUser }) => {
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [serverLogs, setServerLogs] = useState([]);
+  const [broadcastMessage, setBroadcastMessage] = useState('');
+  const [selectedPlayerForReset, setSelectedPlayerForReset] = useState(null);
   const { toast } = useToast();
 
   useEffect(() => {
