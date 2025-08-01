@@ -47,11 +47,23 @@ async def create_trade_offer(
         }
         
         # Store in database
-        await db.db.trade_offers.insert_one(trade_offer)
+        result = await db.db.trade_offers.insert_one(trade_offer)
+        
+        # Prepare serializable response
+        response_trade_offer = {
+            "id": trade_offer["id"],
+            "creatorUsername": trade_offer["creatorUsername"],
+            "offering": trade_offer["offering"],
+            "requesting": trade_offer["requesting"],
+            "duration": trade_offer["duration"],
+            "createdAt": trade_offer["createdAt"].isoformat(),
+            "expiresAt": trade_offer["expiresAt"].isoformat(),
+            "active": trade_offer["active"]
+        }
         
         return {
             "success": True,
-            "trade_offer": trade_offer
+            "trade_offer": response_trade_offer
         }
         
     except HTTPException:
