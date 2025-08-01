@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Shield, Users, MessageSquare, Settings, Edit, Trash2, Ban, CheckCircle, Terminal, Refresh, AlertTriangle } from 'lucide-react';
+import { Shield, Users, MessageSquare, Settings, Edit, Trash2, Ban, CheckCircle, Terminal, RefreshCw, AlertTriangle } from 'lucide-react';
 import apiService from '../services/apiService';
 import { useToast } from '../hooks/use-toast';
 
