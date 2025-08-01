@@ -2,9 +2,9 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from typing import List
 import logging
 
-from ..routes.auth import get_current_user
-from ..database.mongodb import db
-from ..models.user import ChatMessage, PrivateMessage
+from routes.auth import get_current_user
+from database.mongodb import db
+from models.user import ChatMessage, PrivateMessage
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/chat", tags=["chat"])
