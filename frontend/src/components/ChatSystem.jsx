@@ -6,7 +6,8 @@ import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { ScrollArea } from './ui/scroll-area';
 import { MessageCircle, Send, Users, Crown, Shield } from 'lucide-react';
-import { mockChatData } from '../utils/mockChatData';
+import apiService from '../services/apiService';
+import { useToast } from '../hooks/use-toast';
 
 const ChatSystem = ({ player }) => {
   const [globalMessages, setGlobalMessages] = useState(mockChatData.getGlobalMessages());
