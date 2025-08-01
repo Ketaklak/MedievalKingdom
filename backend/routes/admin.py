@@ -319,6 +319,110 @@ async def delete_message(
         logger.error(f"Failed to delete message: {e}")
         raise HTTPException(status_code=500, detail="Failed to delete message")
 
+@router.post("/broadcast-message")
+async def broadcast_message(
+    message_data: dict,
+    current_user: dict = Depends(require_admin)
+):
+    """Send a system broadcast message (admin only)"""
+    try:
+        content = message_data.get("content", "").strip()
+        if not content:
+            raise HTTPException(status_code=400, detail="Message content is required")
+
+        # Create system message
+        system_message = {
+            "username": "SYSTEM",
+            "content": f"📢 ADMIN BROADCAST: {content}",
+            "empire": "system",
+            "messageType": "global",
+            "isSystemMessage": True
+        }
+
+        message_id = await db.add_chat_message(system_message)
+
+        return {
+            "success": True,
+            "message_id": str(message_id),
+            "message": "Broadcast sent successfully"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to send broadcast: {e}")
+        raise HTTPException(status_code=500, detail="Failed to send broadcast")
+
+@router.post("/reset-player-resources")
+async def reset_player_resources(
+    reset_data: dict,
+    current_user: dict = Depends(require_admin)
+):
+    """Reset a player's resources (admin only)"""
+    try:
+        username = reset_data.get("username")
+        if not username:
+            raise HTTPException(status_code=400, detail="Username is required")
+
+        player = await db.get_player_by_username(username)
+        if not player:
+            raise HTTPException(status_code=404, detail="Player not found")
+
+        # Reset to default starting resources
+        default_resources = {"gold": 1000, "wood": 500, "stone": 500, "food": 500}
+        
+        await db.update_player(player["userId"], {"resources": default_resources})
+
+        return {
+            "success": True,
+            "message": f"Resources reset for player {username}"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to reset player resources: {e}")
+        raise HTTPException(status_code=500, detail="Failed to reset player resources")
+
+@router.get("/server-logs")
+async def get_server_logs(
+    current_user: dict = Depends(require_admin),
+    limit: int = 100
+):
+    """Get recent server logs (admin only)"""
+    try:
+        # This would typically read from log files
+        # For now, return mock server logs
+        logs = [
+            {
+                "timestamp": "2025-01-01T12:00:00Z",
+                "level": "INFO",
+                "message": "Server started successfully",
+                "source": "server.py"
+            },
+            {
+                "timestamp": "2025-01-01T12:01:00Z",
+                "level": "INFO", 
+                "message": "Database connection established",
+                "source": "mongodb.py"
+            },
+            {
+                "timestamp": "2025-01-01T12:02:00Z",
+                "level": "WARNING",
+                "message": "High memory usage detected",
+                "source": "background_tasks.py"
+            }
+        ]
+
+        return {
+            "success": True,
+            "logs": logs[:limit]
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get server logs: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get server logs")
+
 @router.post("/reset-game-data")
 async def reset_game_data(
     reset_data: dict,
