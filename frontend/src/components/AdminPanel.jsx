@@ -110,6 +110,10 @@ const AdminPanel = ({ currentUser }) => {
       const systemResponse = await apiService.getAdminSystemInfo();
       setSystemInfo(systemResponse);
 
+      // Load server logs
+      const logsResponse = await apiService.getServerLogs(50);
+      setServerLogs(logsResponse.logs || []);
+
       addLogEntry('info', 'Admin data refreshed successfully');
     } catch (error) {
       addLogEntry('error', `Failed to load admin data: ${error.message}`);
