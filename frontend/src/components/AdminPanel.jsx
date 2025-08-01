@@ -289,6 +289,7 @@ const AdminPanel = ({ currentUser }) => {
             <TabsTrigger value="players">Players</TabsTrigger>
             <TabsTrigger value="chat">Chat Management</TabsTrigger>
             <TabsTrigger value="console">Console & Logs</TabsTrigger>
+            <TabsTrigger value="tools">Admin Tools</TabsTrigger>
             <TabsTrigger value="system">System Info</TabsTrigger>
           </TabsList>
 
