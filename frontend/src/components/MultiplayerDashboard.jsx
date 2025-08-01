@@ -12,15 +12,25 @@ import AdminPanel from './AdminPanel';
 import { useToast } from '../hooks/use-toast';
 
 const MultiplayerDashboard = ({ player, onLogout }) => {
-  const [resources, setResources] = useState(mockMultiplayerData.getPlayerResources(player.username));
-  const [buildings, setBuildings] = useState(mockMultiplayerData.getPlayerBuildings(player.username));
-  const [constructionQueue, setConstructionQueue] = useState(mockMultiplayerData.getConstructionQueue(player.username));
-  const [leaderboard, setLeaderboard] = useState(mockMultiplayerData.getLeaderboard());
-  const [nearbyPlayers, setNearbyPlayers] = useState(mockMultiplayerData.getNearbyPlayers(player.username));
+  const { 
+    resources, 
+    buildings, 
+    constructionQueue, 
+    army, 
+    loading, 
+    error,
+    upgradeBuilding,
+    recruitSoldiers,
+    launchRaid
+  } = useRealTimeData(player);
+  
+  const { leaderboard } = useLeaderboard();
+  const { nearbyPlayers } = useNearbyPlayers();
+  
   const [selectedTarget, setSelectedTarget] = useState(null);
-  const [armySize, setArmySize] = useState(mockMultiplayerData.getPlayerArmy(player.username));
   const [showProfile, setShowProfile] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
+  const { toast } = useToast();
 
   // Resource icons mapping
   const resourceIcons = {
@@ -40,130 +50,66 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
     blacksmith: Hammer
   };
 
-  // Empire bonuses
-  const empireBonus = mockMultiplayerData.getEmpireBonus(player.empire);
+  const canAffordBuilding = (building) => {
+    if (!resources || !building) return false;
+    // This will be calculated by the backend
+    return true; // Let backend handle the validation
+  };
 
-  // Real-time resource updates with empire bonuses
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setResources(prevResources => {
-        const newResources = { ...prevResources };
-        const buildingBonus = mockMultiplayerData.calculateResourceGeneration(buildings, player.empire);
-        
-        newResources.gold = Math.floor(newResources.gold + buildingBonus.gold);
-        newResources.wood = Math.floor(newResources.wood + buildingBonus.wood);
-        newResources.stone = Math.floor(newResources.stone + buildingBonus.stone);
-        newResources.food = Math.floor(newResources.food + buildingBonus.food);
-        
-        mockMultiplayerData.updatePlayerResources(player.username, newResources);
-        return newResources;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [buildings, player.empire, player.username]);
-
-  // Construction timer updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setConstructionQueue(prevQueue => {
-        const newQueue = prevQueue.map(item => ({
-          ...item,
-          timeRemaining: Math.max(0, item.timeRemaining - 1)
-        })).filter(item => {
-          if (item.timeRemaining <= 0) {
-            // Complete construction
-            setBuildings(prevBuildings => 
-              prevBuildings.map(building => 
-                building.id === item.buildingId 
-                  ? { ...building, level: building.level + 1, constructing: false }
-                  : building
-              )
-            );
-            return false;
-          }
-          return true;
+  const startConstruction = async (building) => {
+    try {
+      const result = await upgradeBuilding(building.id);
+      if (result.success) {
+        toast({
+          title: "Construction Started",
+          description: `Upgrading ${building.type} to level ${building.level + 1}`,
         });
-        
-        mockMultiplayerData.updateConstructionQueue(player.username, newQueue);
-        return newQueue;
+      }
+    } catch (error) {
+      toast({
+        title: "Construction Failed",
+        description: error.message,
+        variant: "destructive"
       });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [player.username]);
-
-  // Update leaderboard periodically
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLeaderboard(mockMultiplayerData.getLeaderboard());
-      setNearbyPlayers(mockMultiplayerData.getNearbyPlayers(player.username));
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [player.username]);
-
-  const canAffordBuilding = (cost) => {
-    return Object.keys(cost).every(resource => resources[resource] >= cost[resource]);
-  };
-
-  const startConstruction = (building) => {
-    const cost = mockMultiplayerData.getBuildingCost(building.type, building.level + 1);
-    if (!canAffordBuilding(cost) || building.constructing) return;
-
-    // Deduct resources
-    const newResources = { ...resources };
-    Object.keys(cost).forEach(resource => {
-      newResources[resource] -= cost[resource];
-    });
-    
-    setResources(newResources);
-    mockMultiplayerData.updatePlayerResources(player.username, newResources);
-
-    // Add to construction queue
-    const constructionTime = mockMultiplayerData.getBuildingTime(building.type, building.level + 1);
-    const newQueueItem = {
-      id: Date.now(),
-      buildingId: building.id,
-      buildingType: building.type,
-      targetLevel: building.level + 1,
-      timeRemaining: constructionTime
-    };
-
-    setConstructionQueue(prev => [...prev, newQueueItem]);
-    setBuildings(prev => 
-      prev.map(b => b.id === building.id ? { ...b, constructing: true } : b)
-    );
-  };
-
-  const launchRaid = (targetPlayer) => {
-    if (armySize === 0) return;
-    
-    // Mock raid results
-    const success = Math.random() > 0.5;
-    const stolenResources = success ? {
-      gold: Math.floor(Math.random() * 200) + 50,
-      wood: Math.floor(Math.random() * 100) + 25,
-      stone: Math.floor(Math.random() * 100) + 25,
-      food: Math.floor(Math.random() * 50) + 10
-    } : {};
-
-    if (success) {
-      const newResources = { ...resources };
-      Object.keys(stolenResources).forEach(resource => {
-        newResources[resource] += stolenResources[resource];
-      });
-      setResources(newResources);
-      mockMultiplayerData.updatePlayerResources(player.username, newResources);
-      
-      // Add raid to history
-      mockMultiplayerData.addRaidHistory(player.username, targetPlayer.username, true, stolenResources);
-    } else {
-      mockMultiplayerData.addRaidHistory(player.username, targetPlayer.username, false, {});
     }
+  };
 
-    // Reduce army size
-    setArmySize(prev => Math.max(0, prev - Math.floor(Math.random() * 10) - 5));
+  const handleRaid = async (targetPlayer) => {
+    try {
+      const result = await launchRaid(targetPlayer.username);
+      if (result.success) {
+        const raidResult = result.raid_result;
+        toast({
+          title: raidResult.success ? "Raid Successful!" : "Raid Failed",
+          description: raidResult.battleReport,
+          variant: raidResult.success ? "default" : "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Raid Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleRecruitSoldiers = async () => {
+    try {
+      const result = await recruitSoldiers('soldiers', 10);
+      if (result.success) {
+        toast({
+          title: "Soldiers Recruited",
+          description: "10 soldiers have joined your army",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Recruitment Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
   };
 
   const formatTime = (seconds) => {
@@ -174,10 +120,38 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
   };
 
   const calculatePower = () => {
-    const buildingPower = buildings.reduce((total, building) => total + (building.level * 100), 0);
-    const armyPower = armySize * 50;
-    return buildingPower + armyPower;
+    return player?.power || 0;
   };
+
+  const getArmySize = () => {
+    if (!army) return 0;
+    if (typeof army === 'object') {
+      return Object.values(army).reduce((total, count) => total + count, 0);
+    }
+    return army;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center text-white">
+        <div className="text-xl">Loading your kingdom...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center text-white">
+        <div className="text-center">
+          <div className="text-xl mb-4">Error loading kingdom data</div>
+          <div className="text-red-400">{error}</div>
+          <Button onClick={() => window.location.reload()} className="mt-4">
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-4">
