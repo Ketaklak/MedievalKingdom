@@ -902,6 +902,12 @@ class MedievalEmpiresAPITester:
         # Run new shop system tests
         await self.test_shop_system()
         
+        # Run final comprehensive tests (User Requested Features)
+        await self.test_alliance_map_system()
+        await self.test_new_admin_features()
+        await self.test_construction_queue_verification()
+        await self.test_overall_system_health()
+        
         # Print summary
         end_time = datetime.now()
         duration = (end_time - start_time).total_seconds()
