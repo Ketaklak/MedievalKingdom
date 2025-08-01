@@ -140,6 +140,8 @@ class MongoDB:
             player = await self.db.players.find_one({"username": username})
             if player:
                 player['id'] = str(player['_id'])
+                # Remove the _id field to avoid serialization issues
+                del player['_id']
             return player
         except Exception as e:
             logger.error(f"Failed to get player by username: {e}")
