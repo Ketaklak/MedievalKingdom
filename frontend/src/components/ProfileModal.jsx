@@ -209,6 +209,11 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
                           <SelectItem value="frankish">Frankish Empire</SelectItem>
                         </SelectContent>
                       </Select>
+                      {profileData.empire !== player.empire && (
+                        <p className="text-xs text-amber-400">
+                          ⚠️ Changing empire requires a Race Change Scroll (You have: {player.raceChangeScrolls || 0})
+                        </p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label>Biography</Label>
