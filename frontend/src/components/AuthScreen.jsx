@@ -228,19 +228,35 @@ const AuthScreen = ({ onLogin }) => {
                 )}
 
                 <div className="space-y-4">
-                  <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700 text-lg py-3">
-                    {isLogin ? 'Enter Kingdom' : 'Found Empire'}
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-amber-600 hover:bg-amber-700 text-lg py-3"
+                    disabled={loading}
+                  >
+                    {loading ? 'Please wait...' : (isLogin ? 'Enter Kingdom' : 'Found Empire')}
                   </Button>
 
                   <div className="text-center">
                     <button
                       type="button"
-                      onClick={() => setIsLogin(!isLogin)}
+                      onClick={() => {
+                        setIsLogin(!isLogin);
+                        setError(null);
+                      }}
                       className="text-amber-400 hover:text-amber-300 underline"
+                      disabled={loading}
                     >
                       {isLogin ? "Don't have a kingdom? Create one" : "Already have a kingdom? Enter here"}
                     </button>
                   </div>
+                  
+                  {isLogin && (
+                    <div className="text-center">
+                      <p className="text-sm text-slate-400">
+                        Demo Admin: username "admin", password "admin"
+                      </p>
+                    </div>
+                  )}
                 </div>
               </form>
             </CardContent>
