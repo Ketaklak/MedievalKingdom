@@ -209,6 +209,8 @@ class MongoDB:
             
             for player in players:
                 player['id'] = str(player['_id'])
+                # Remove the _id field to avoid serialization issues
+                del player['_id']
             return players
         except Exception as e:
             logger.error(f"Failed to get nearby players: {e}")
