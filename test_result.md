@@ -200,6 +200,9 @@ backend:
         - working: true
           agent: "testing"
           comment: "Alliance creation now works correctly with proper validation and serialization"
+        - working: true
+          agent: "testing"
+          comment: "Alliance system fully functional. POST /api/diplomacy/alliance/create works with proper validation (prevents duplicate names and multiple memberships). GET endpoints for alliance list, my alliance, alliance map, and invites all working correctly. Serialization issues resolved."
 
   - task: "Alliance Map System"
     implemented: false
