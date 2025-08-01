@@ -85,10 +85,15 @@ async def get_trade_offers(current_user: dict = Depends(get_current_user)):
         
         offers = await cursor.to_list(length=20)
         
-        # Convert ObjectId to string
+        # Convert ObjectId to string and format dates
         for offer in offers:
             offer["id"] = str(offer["_id"])
             del offer["_id"]
+            # Convert datetime objects to ISO format strings
+            if "createdAt" in offer and offer["createdAt"]:
+                offer["createdAt"] = offer["createdAt"].isoformat()
+            if "expiresAt" in offer and offer["expiresAt"]:
+                offer["expiresAt"] = offer["expiresAt"].isoformat()
         
         return {"offers": offers}
         
