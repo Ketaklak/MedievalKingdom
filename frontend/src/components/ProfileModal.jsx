@@ -44,11 +44,21 @@ const ProfileModal = ({ isOpen, onClose, player, onUpdate }) => {
     const buildingLevels = player.buildings?.reduce((sum, building) => sum + building.level, 0) || 0;
     const totalResources = Object.values(player.resources || {}).reduce((sum, amount) => sum + amount, 0);
     
+    // Calculate total army size if army is an object, otherwise use as number
+    let armySize = 0;
+    if (player.army) {
+      if (typeof player.army === 'object') {
+        armySize = Object.values(player.army).reduce((total, count) => total + (count || 0), 0);
+      } else {
+        armySize = player.army;
+      }
+    }
+    
     return {
       power,
       buildingLevels,
       totalResources,
-      army: player.army || 0,
+      army: armySize,
       joinDate: new Date(2024, 0, 1).toLocaleDateString(), // Mock join date
       lastActive: new Date(player.lastActive || Date.now()).toLocaleDateString()
     };
