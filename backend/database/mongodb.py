@@ -239,6 +239,7 @@ class MongoDB:
     async def add_private_message(self, message_data: dict) -> str:
         """Add a private message"""
         try:
+            message_data['timestamp'] = datetime.utcnow()
             result = await self.db.private_messages.insert_one(message_data)
             return str(result.inserted_id)
         except Exception as e:
