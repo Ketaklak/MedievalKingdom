@@ -116,6 +116,24 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
     }
   };
 
+  const handleRecruitSoldiers = async () => {
+    try {
+      const result = await recruitSoldiers('soldiers', 10);
+      if (result.success) {
+        toast({
+          title: "Soldiers Recruited",
+          description: "10 soldiers have joined your army",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Recruitment Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
