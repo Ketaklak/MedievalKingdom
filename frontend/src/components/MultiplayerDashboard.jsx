@@ -10,6 +10,7 @@ import ChatSystem from './ChatSystem';
 import ProfileModal from './ProfileModal';
 import AdminPanel from './AdminPanel';
 import { useToast } from '../hooks/use-toast';
+import apiService from '../services/apiService';
 
 const MultiplayerDashboard = ({ player, onLogout }) => {
   const { 
