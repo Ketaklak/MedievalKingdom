@@ -37,6 +37,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
   const [selectedTarget, setSelectedTarget] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
+  const [showShop, setShowShop] = useState(false);
   const [showCreateAlliance, setShowCreateAlliance] = useState(false);
   const [showCreateTrade, setShowCreateTrade] = useState(false);
   const [allianceFormData, setAllianceFormData] = useState({ name: '', description: '' });
