@@ -197,9 +197,6 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                   <div>
                     <p className="text-sm text-slate-400 capitalize">{resourceType}</p>
                     <p className="text-xl font-bold">{amount.toLocaleString()}</p>
-                    {bonus > 0 && (
-                      <p className="text-xs text-green-400">+{bonus}% bonus</p>
-                    )}
                   </div>
                 </div>
               </CardContent>
