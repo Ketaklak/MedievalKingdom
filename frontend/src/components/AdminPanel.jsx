@@ -319,7 +319,7 @@ const AdminPanel = ({ currentUser }) => {
                   <CardTitle className="text-sm font-medium text-slate-400">Total Messages</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-amber-400">{stats.totalMessages || 0}</div>
+                  <div className="text-2xl font-bold text-amber-400">{stats?.totalMessages || 0}</div>
                 </CardContent>
               </Card>
 
