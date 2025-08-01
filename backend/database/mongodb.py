@@ -350,6 +350,71 @@ class MongoDB:
             raise
 
     # Statistics
+    async def create_admin_user(self, username: str, password: str, email: str = None):
+        """Create an admin user"""
+        try:
+            from passlib.context import CryptContext
+            pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+            
+            # Hash password
+            hashed_password = pwd_context.hash(password)
+            
+            # Create user document
+            user_doc = {
+                "username": username,
+                "password": hashed_password,
+                "email": email or f"{username}@admin.com",
+                "isAdmin": True,
+                "joinDate": datetime.utcnow(),
+                "lastActive": datetime.utcnow()
+            }
+            
+            # Create player document
+            player_doc = {
+                "username": username,
+                "kingdomName": f"{username}'s Admin Kingdom",
+                "empire": "frankish",
+                "resources": {
+                    "gold": 10000,
+                    "wood": 10000,
+                    "stone": 10000,
+                    "food": 10000
+                },
+                "buildings": {
+                    "castle": {"level": 5},
+                    "farm": {"level": 5},
+                    "lumbermill": {"level": 5},
+                    "mine": {"level": 5},
+                    "barracks": {"level": 5},
+                    "blacksmith": {"level": 5}
+                },
+                "army": {
+                    "soldiers": 100,
+                    "archers": 50,
+                    "cavalry": 25
+                },
+                "inventory": {
+                    "Race Change Scroll": 10
+                },
+                "constructionQueue": [],
+                "power": 1000,
+                "lastActive": datetime.utcnow(),
+                "createdAt": datetime.utcnow(),
+                "isAdmin": True
+            }
+            
+            # Insert user and player
+            user_result = await self.db.users.insert_one(user_doc)
+            player_doc["userId"] = str(user_result.inserted_id)
+            await self.db.players.insert_one(player_doc)
+            
+            logger.info(f"Admin user '{username}' created successfully")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to create admin user: {e}")
+            return False
+
     async def get_game_stats(self) -> dict:
         """Get overall game statistics"""
         try:
