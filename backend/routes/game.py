@@ -3,12 +3,12 @@ from typing import List, Dict
 from datetime import datetime, timedelta
 import logging
 
-from ..routes.auth import get_current_user
-from ..database.mongodb import db
-from ..game.buildings import BuildingSystem
-from ..game.empire_bonuses import EmpireBonuses
-from ..game.combat import CombatSystem
-from ..models.user import PlayerModification
+from routes.auth import get_current_user
+from database.mongodb import db
+from game.buildings import BuildingSystem
+from game.empire_bonuses import EmpireBonuses
+from game.combat import CombatSystem
+from models.user import PlayerModification
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/game", tags=["game"])
