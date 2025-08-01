@@ -216,6 +216,7 @@ class MongoDB:
     async def add_chat_message(self, message_data: dict) -> str:
         """Add a chat message"""
         try:
+            message_data['timestamp'] = datetime.utcnow()
             result = await self.db.chat_messages.insert_one(message_data)
             return str(result.inserted_id)
         except Exception as e:
