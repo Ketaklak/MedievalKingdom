@@ -430,14 +430,148 @@ async def update_player_profile(
             update_data["location"] = profile_data.location
         if profile_data.motto is not None:
             update_data["motto"] = profile_data.motto
-        if profile_data.empire:
+        
+        # Empire change requires special items (race change scroll)
+        if profile_data.empire and profile_data.empire != player.get("empire"):
+            # Check if player has race change scroll in inventory
+            player_inventory = player.get("inventory", {})
+            race_change_scrolls = player_inventory.get("raceChangeScroll", 0)
+            
+            if race_change_scrolls <= 0:
+                raise HTTPException(
+                    status_code=400, 
+                    detail="Race change requires a Race Change Scroll from the shop"
+                )
+            
+            # Consume the scroll
+            new_inventory = player_inventory.copy()
+            new_inventory["raceChangeScroll"] = race_change_scrolls - 1
+            update_data["inventory"] = new_inventory
             update_data["empire"] = profile_data.empire
+        
+        if not update_data:
+            raise HTTPException(status_code=400, detail="No valid updates provided")
         
         # Update database
         await db.update_player(player["username"], update_data)
         
         return {"success": True, "message": "Profile updated successfully"}
         
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Failed to update profile: {e}")
         raise HTTPException(status_code=500, detail="Failed to update profile")
+
+# Shop System
+@router.get("/shop/items")
+async def get_shop_items():
+    """Get available shop items"""
+    shop_items = [
+        {
+            "id": "raceChangeScroll",
+            "name": "Race Change Scroll",
+            "description": "Allows you to change your empire/race once",
+            "price": {"gold": 5000},
+            "category": "special",
+            "icon": "scroll"
+        },
+        {
+            "id": "resourcePack",
+            "name": "Resource Pack",
+            "description": "Contains 1000 of each resource",
+            "price": {"gold": 2000},
+            "category": "resources",
+            "icon": "chest"
+        },
+        {
+            "id": "armyBoost",
+            "name": "Army Recruitment Boost",
+            "description": "Instantly recruit 100 soldiers",
+            "price": {"gold": 1500},
+            "category": "military",
+            "icon": "sword"
+        },
+        {
+            "id": "buildingBoost",
+            "name": "Construction Speed Boost",
+            "description": "Complete current construction instantly",
+            "price": {"gold": 1000},
+            "category": "construction",
+            "icon": "hammer"
+        }
+    ]
+    
+    return {"items": shop_items}
+
+@router.post("/shop/buy/{item_id}")
+async def buy_shop_item(
+    item_id: str,
+    purchase_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Buy an item from the shop"""
+    try:
+        player = current_user["player"]
+        quantity = purchase_data.get("quantity", 1)
+        
+        # Get shop items
+        shop_response = await get_shop_items()
+        shop_items = {item["id"]: item for item in shop_response["items"]}
+        
+        if item_id not in shop_items:
+            raise HTTPException(status_code=404, detail="Item not found")
+        
+        item = shop_items[item_id]
+        total_cost = {}
+        
+        # Calculate total cost
+        for resource, cost in item["price"].items():
+            total_cost[resource] = cost * quantity
+        
+        # Check if player can afford
+        for resource, cost in total_cost.items():
+            if player["resources"].get(resource, 0) < cost:
+                raise HTTPException(status_code=400, detail=f"Insufficient {resource}")
+        
+        # Deduct cost
+        new_resources = player["resources"].copy()
+        for resource, cost in total_cost.items():
+            new_resources[resource] -= cost
+        
+        # Add item to inventory
+        inventory = player.get("inventory", {})
+        inventory[item_id] = inventory.get(item_id, 0) + quantity
+        
+        # Apply item effects immediately for some items
+        if item_id == "resourcePack":
+            new_resources["gold"] += 1000 * quantity
+            new_resources["wood"] += 1000 * quantity
+            new_resources["stone"] += 1000 * quantity
+            new_resources["food"] += 1000 * quantity
+            # Don't add to inventory for consumables
+            inventory[item_id] = inventory.get(item_id, 0)
+        elif item_id == "armyBoost":
+            new_army = player["army"].copy()
+            new_army["soldiers"] = new_army.get("soldiers", 0) + 100 * quantity
+            await db.update_player(player["username"], {"army": new_army})
+            inventory[item_id] = inventory.get(item_id, 0)
+        
+        # Update database
+        await db.update_player(player["username"], {
+            "resources": new_resources,
+            "inventory": inventory
+        })
+        
+        return {
+            "success": True,
+            "message": f"Purchased {quantity}x {item['name']}",
+            "new_resources": new_resources,
+            "inventory": inventory
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to buy shop item: {e}")
+        raise HTTPException(status_code=500, detail="Failed to buy shop item")
