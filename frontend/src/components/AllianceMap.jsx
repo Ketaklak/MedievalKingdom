@@ -45,7 +45,7 @@ const AllianceMap = () => {
       crown: Crown,
       sword: Sword,
       shield: Shield,
-      dragon: Dragon,
+      dragon: Flame,
       eagle: '🦅',
       lion: '🦁'
     };
