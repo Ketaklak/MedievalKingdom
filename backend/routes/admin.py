@@ -247,6 +247,78 @@ async def get_all_chat_messages(
         logger.error(f"Failed to get chat messages: {e}")
         raise HTTPException(status_code=500, detail="Failed to get chat messages")
 
+@router.put("/players/{username}")
+async def update_player_admin(
+    username: str,
+    update_data: dict,
+    current_user: dict = Depends(require_admin)
+):
+    """Update player data (admin only)"""
+    try:
+        # Get player
+        player = await db.get_player_by_username(username)
+        if not player:
+            raise HTTPException(status_code=404, detail="Player not found")
+
+        # Prepare update data
+        allowed_fields = ['kingdomName', 'empire', 'bio', 'location', 'motto', 'resources', 'isAdmin']
+        update_fields = {}
+        
+        for field in allowed_fields:
+            if field in update_data:
+                update_fields[field] = update_data[field]
+
+        # Update player
+        if update_fields:
+            await db.update_player(player["userId"], update_fields)
+
+        # If updating admin status, also update user record
+        if 'isAdmin' in update_data:
+            user = await db.get_user_by_username(username)
+            if user:
+                from bson import ObjectId
+                await db.db.users.update_one(
+                    {"_id": ObjectId(user["id"])},
+                    {"$set": {"isAdmin": update_data['isAdmin']}}
+                )
+
+        return {
+            "success": True,
+            "message": f"Player {username} updated successfully"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to update player: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update player")
+
+@router.delete("/messages/{message_id}")
+async def delete_message(
+    message_id: str,
+    current_user: dict = Depends(require_admin)
+):
+    """Delete a chat message (admin only)"""
+    try:
+        from bson import ObjectId
+        
+        # Delete the message
+        result = await db.db.chat_messages.delete_one({"_id": ObjectId(message_id)})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Message not found")
+
+        return {
+            "success": True,
+            "message": "Message deleted successfully"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to delete message: {e}")
+        raise HTTPException(status_code=500, detail="Failed to delete message")
+
 @router.post("/reset-game-data")
 async def reset_game_data(
     reset_data: dict,
