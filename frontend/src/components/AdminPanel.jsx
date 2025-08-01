@@ -38,7 +38,7 @@ const AdminPanel = ({ currentUser }) => {
       if (autoRefresh) {
         loadData();
       }
-    }, 30000);
+    }, 10000); // Reduced to 10 seconds for more real-time feel
 
     return () => clearInterval(interval);
   }, [autoRefresh]);
