@@ -198,58 +198,85 @@ async def launch_raid(
         attacker = current_user["player"]
         target_username = raid_data.get("targetUsername")
         
+        if not target_username:
+            raise HTTPException(status_code=400, detail="Target username is required")
+        
         # Get target player
         defender = await db.get_player_by_username(target_username)
         if not defender:
             raise HTTPException(status_code=404, detail="Target player not found")
         
-        # Prepare combat data
-        attacker_data = {
-            "userId": attacker["userId"],
-            "username": attacker["username"],
-            "empire": attacker["empire"],
-            "army": sum(attacker["army"].values()),
-            "buildings": attacker["buildings"],
-            "resources": attacker["resources"]
-        }
+        # Check if attacker has army
+        attacker_army_size = sum(attacker["army"].values()) if attacker.get("army") else 0
+        if attacker_army_size == 0:
+            raise HTTPException(status_code=400, detail="No army available for raid")
         
-        defender_data = {
-            "userId": defender["userId"],
-            "username": defender["username"],
-            "empire": defender["empire"],
-            "army": sum(defender["army"].values()),
-            "buildings": defender["buildings"],
-            "resources": defender["resources"]
-        }
+        # Check if not attacking self
+        if attacker["username"] == target_username:
+            raise HTTPException(status_code=400, detail="Cannot raid yourself")
         
-        # Check if raid is allowed
-        can_raid, reason = CombatSystem.can_raid_target(attacker_data, defender_data)
-        if not can_raid:
-            raise HTTPException(status_code=400, detail=reason)
+        # Simple raid calculation
+        defender_army_size = sum(defender["army"].values()) if defender.get("army") else 0
         
-        # Calculate raid result
-        raid_result = CombatSystem.calculate_raid_result(attacker_data, defender_data)
+        # Calculate success chance (attacker advantage)
+        success_chance = min(0.8, max(0.2, attacker_army_size / (attacker_army_size + defender_army_size + 1)))
+        success = __import__('random').random() < success_chance
         
-        # Apply results to both players
-        new_attacker_data, new_defender_data = CombatSystem.apply_raid_results(
-            attacker_data, defender_data, raid_result
-        )
+        # Calculate casualties
+        attacker_losses = max(1, int(attacker_army_size * 0.1))
+        defender_losses = max(1, int(defender_army_size * 0.15)) if success else max(1, int(defender_army_size * 0.05))
+        
+        # Calculate stolen resources
+        stolen_resources = {}
+        if success:
+            for resource in ["gold", "wood", "stone", "food"]:
+                defender_amount = defender["resources"].get(resource, 0)
+                steal_amount = int(defender_amount * __import__('random').uniform(0.05, 0.15))
+                if steal_amount > 0:
+                    stolen_resources[resource] = steal_amount
+        
+        # Update attacker
+        new_attacker_resources = attacker["resources"].copy()
+        for resource, amount in stolen_resources.items():
+            new_attacker_resources[resource] += amount
+        
+        new_attacker_army = attacker["army"].copy()
+        new_attacker_army["soldiers"] = max(0, new_attacker_army.get("soldiers", 0) - attacker_losses)
+        
+        # Update defender  
+        new_defender_resources = defender["resources"].copy()
+        for resource, amount in stolen_resources.items():
+            new_defender_resources[resource] = max(0, new_defender_resources[resource] - amount)
+        
+        new_defender_army = defender["army"].copy()
+        new_defender_army["soldiers"] = max(0, new_defender_army.get("soldiers", 0) - defender_losses)
         
         # Update database
-        await db.add_raid_result(raid_result)
         await db.update_player(attacker["username"], {
-            "resources": new_attacker_data["resources"],
-            "army": {"soldiers": new_attacker_data["army"], "archers": 0, "cavalry": 0}
+            "resources": new_attacker_resources,
+            "army": new_attacker_army
         })
         await db.update_player(defender["username"], {
-            "resources": new_defender_data["resources"],
-            "army": {"soldiers": new_defender_data["army"], "archers": 0, "cavalry": 0},
-            "lastRaidTime": datetime.utcnow()
+            "resources": new_defender_resources,
+            "army": new_defender_army
         })
+        
+        # Create battle report
+        battle_report = f"{'Successful' if success else 'Failed'} raid on {target_username}. "
+        if success and stolen_resources:
+            resource_list = [f"{amount} {resource}" for resource, amount in stolen_resources.items()]
+            battle_report += f"Stolen: {', '.join(resource_list)}. "
+        battle_report += f"Casualties - Attacker: {attacker_losses}, Defender: {defender_losses}"
         
         return {
             "success": True,
-            "raid_result": raid_result
+            "raid_result": {
+                "success": success,
+                "stolenResources": stolen_resources,
+                "attackerLosses": attacker_losses,
+                "defenderLosses": defender_losses,
+                "battleReport": battle_report
+            }
         }
         
     except HTTPException:
