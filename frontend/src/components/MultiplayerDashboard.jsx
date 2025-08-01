@@ -110,10 +110,9 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
       if (result.success) {
         toast({
           title: "Army Training Complete",
-          description: `${result.message}. Experience gained: ${result.experience_gained}`,
+          description: result.message,
         });
-        // Refresh data
-        await refetch();
+        refetch(); // Refresh data
       }
     } catch (error) {
       toast({
@@ -126,16 +125,92 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
 
   const handleRecruitSoldiers = async () => {
     try {
-      const result = await recruitSoldiers('soldiers', 10);
+      const result = await recruitSoldiers();
       if (result.success) {
         toast({
-          title: "Soldiers Recruited",
+          title: "Recruitment Successful",
           description: "10 soldiers have joined your army",
         });
       }
     } catch (error) {
       toast({
         title: "Recruitment Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCreateAlliance = async () => {
+    try {
+      if (!allianceFormData.name.trim()) {
+        toast({
+          title: "Invalid Input",
+          description: "Alliance name is required",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const result = await apiService.createAlliance(allianceFormData.name, allianceFormData.description);
+      if (result.success) {
+        toast({
+          title: "Alliance Created!",
+          description: `Successfully created alliance: ${allianceFormData.name}`,
+        });
+        setShowCreateAlliance(false);
+        setAllianceFormData({ name: '', description: '' });
+        refetch(); // Refresh data
+      }
+    } catch (error) {
+      toast({
+        title: "Alliance Creation Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCreateTrade = async () => {
+    try {
+      // Validate that we're offering and requesting something
+      const hasOffering = Object.values(tradeFormData.offering).some(val => val > 0);
+      const hasRequesting = Object.values(tradeFormData.requesting).some(val => val > 0);
+      
+      if (!hasOffering || !hasRequesting) {
+        toast({
+          title: "Invalid Trade",
+          description: "Must specify both what you're offering and requesting",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Filter out zero values
+      const offering = Object.fromEntries(
+        Object.entries(tradeFormData.offering).filter(([_, value]) => value > 0)
+      );
+      const requesting = Object.fromEntries(
+        Object.entries(tradeFormData.requesting).filter(([_, value]) => value > 0)
+      );
+
+      const result = await apiService.createTradeOffer(offering, requesting, tradeFormData.duration);
+      if (result.success) {
+        toast({
+          title: "Trade Offer Created!",
+          description: "Your trade offer has been posted",
+        });
+        setShowCreateTrade(false);
+        setTradeFormData({
+          offering: { gold: 0, wood: 0, stone: 0, food: 0 },
+          requesting: { gold: 0, wood: 0, stone: 0, food: 0 },
+          duration: 3600
+        });
+        refetch(); // Refresh data
+      }
+    } catch (error) {
+      toast({
+        title: "Trade Creation Failed",
         description: error.message,
         variant: "destructive"
       });
