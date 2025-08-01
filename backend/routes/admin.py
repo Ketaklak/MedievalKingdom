@@ -19,6 +19,23 @@ def require_admin(current_user: dict = Depends(get_current_user)):
         )
     return current_user
 
+@router.post("/create-admin", response_model=dict)
+async def create_admin_user(admin_data: dict):
+    """Create admin user - temporary endpoint for setup"""
+    try:
+        username = admin_data.get("username", "admin")
+        password = admin_data.get("password", "admin123")
+        email = admin_data.get("email")
+        
+        success = await db.create_admin_user(username, password, email)
+        if success:
+            return {"message": f"Admin user '{username}' created successfully"}
+        else:
+            raise HTTPException(status_code=400, detail="Failed to create admin user")
+    except Exception as e:
+        logger.error(f"Failed to create admin: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/stats", response_model=dict)
 async def get_admin_stats(current_user: dict = Depends(require_admin)):
     """Get admin dashboard statistics"""
