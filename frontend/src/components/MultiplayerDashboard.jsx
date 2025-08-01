@@ -716,11 +716,64 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                   >
                     Create Alliance
                   </Button>
-                  <div className="space-y-3">
-                    <h4 className="font-medium">Current Alliances</h4>
-                    <div className="text-center text-slate-400 py-4">
-                      No alliances formed
+                  
+                  {/* My Alliance */}
+                  {myAlliance && (
+                    <div className="space-y-3">
+                      <h4 className="font-medium">My Alliance</h4>
+                      <Card className="bg-slate-700/50 border-slate-600">
+                        <CardContent className="p-3">
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <h5 className="font-semibold text-blue-400">{myAlliance.name}</h5>
+                                <p className="text-sm text-slate-400">{myAlliance.description}</p>
+                              </div>
+                              <Badge variant="outline">{myAlliance.members?.length || 0} members</Badge>
+                            </div>
+                            <div className="text-xs text-slate-500">
+                              Created: {new Date(myAlliance.createdAt).toLocaleDateString()}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
                     </div>
+                  )}
+                  
+                  {/* All Alliances */}
+                  <div className="space-y-3">
+                    <h4 className="font-medium">All Alliances</h4>
+                    {alliances.length === 0 ? (
+                      <div className="text-center text-slate-400 py-4">
+                        No alliances formed yet
+                      </div>
+                    ) : (
+                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                        {alliances.map((alliance) => (
+                          <Card key={alliance.id} className="bg-slate-700/50 border-slate-600">
+                            <CardContent className="p-3">
+                              <div className="flex justify-between items-start">
+                                <div className="space-y-1">
+                                  <h5 className="font-medium text-blue-400">{alliance.name}</h5>
+                                  <p className="text-sm text-slate-400">{alliance.description}</p>
+                                  <div className="text-xs text-slate-500">
+                                    Leader: {alliance.leader} | {alliance.members?.length || 0} members
+                                  </div>
+                                </div>
+                                <div className="flex flex-col items-end space-y-1">
+                                  <Badge variant="outline">{alliance.members?.length || 0} members</Badge>
+                                  {alliance.members?.length >= 10 && (
+                                    <Badge variant="default" className="bg-purple-600">
+                                      Elite Alliance
+                                    </Badge>
+                                  )}
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
