@@ -71,31 +71,34 @@ const AuthScreen = ({ onLogin }) => {
     setFormData(prev => ({ ...prev, empire: empireId }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isLogin) {
-      // Mock login - check for admin account
-      if (formData.username === 'admin' && formData.password === 'admin') {
-        onLogin({
-          username: 'admin',
-          kingdomName: 'System Administration',
-          empire: 'system'
+    setLoading(true);
+    setError(null);
+    
+    try {
+      if (isLogin) {
+        // Login
+        await onLogin({
+          username: formData.username,
+          password: formData.password,
+          isRegistration: false
         });
       } else {
-        // Regular login
-        onLogin({
+        // Registration
+        await onLogin({
           username: formData.username,
-          kingdomName: formData.username + "'s Kingdom",
-          empire: 'norman'
+          password: formData.password,
+          email: formData.email || `${formData.username}@medievalempires.com`,
+          kingdomName: formData.kingdomName,
+          empire: formData.empire,
+          isRegistration: true
         });
       }
-    } else {
-      // Registration
-      onLogin({
-        username: formData.username,
-        kingdomName: formData.kingdomName,
-        empire: formData.empire
-      });
+    } catch (error) {
+      setError(error.message || 'Authentication failed');
+    } finally {
+      setLoading(false);
     }
   };
 
