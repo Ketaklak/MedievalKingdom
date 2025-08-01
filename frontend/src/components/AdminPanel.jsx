@@ -655,23 +655,23 @@ const AdminPanel = ({ currentUser }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <p className="text-sm text-slate-400">Server Status</p>
-                    <Badge variant={systemInfo.status === 'healthy' ? 'default' : 'destructive'}>
-                      {systemInfo.status || 'Unknown'}
+                    <Badge variant={systemInfo?.status === 'healthy' ? 'default' : 'destructive'}>
+                      {systemInfo?.status || 'Unknown'}
                     </Badge>
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm text-slate-400">Database</p>
-                    <Badge variant={systemInfo.database === 'connected' ? 'default' : 'destructive'}>
-                      {systemInfo.database || 'Unknown'}
+                    <Badge variant={systemInfo?.database === 'connected' ? 'default' : 'destructive'}>
+                      {systemInfo?.database || 'Unknown'}
                     </Badge>
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm text-slate-400">CPU Usage</p>
-                    <p className="text-white">{typeof systemInfo.cpuUsage === 'string' ? systemInfo.cpuUsage : 'N/A'}</p>
+                    <p className="text-white">{typeof systemInfo?.cpuUsage === 'string' ? systemInfo.cpuUsage : 'N/A'}</p>
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm text-slate-400">Memory Usage</p>
-                    <p className="text-white">{typeof systemInfo.memoryUsage === 'string' ? systemInfo.memoryUsage : 'N/A'}</p>
+                    <p className="text-white">{typeof systemInfo?.memoryUsage === 'string' ? systemInfo.memoryUsage : 'N/A'}</p>
                   </div>
                 </div>
               </CardContent>
