@@ -685,6 +685,194 @@ class MedievalEmpiresAPITester:
         
         # Restore original token
         self.auth_token = original_token
+    
+    async def test_alliance_map_system(self):
+        """Test alliance map system specifically (User Requested Feature)"""
+        print("\n=== Testing Alliance Map System (User Requested Feature) ===")
+        
+        # Test alliance map endpoint
+        success, data, status = await self.make_request("GET", "/diplomacy/alliance/map")
+        self.log_test(
+            "Get Alliance Map (GET /api/diplomacy/alliance/map)",
+            success and status == 200,
+            f"Status: {status}, Map alliances: {len(data.get('alliances', [])) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Check if alliance map has proper blazons for 10+ member alliances
+        if success and isinstance(data, dict):
+            alliances = data.get('alliances', [])
+            blazon_alliances = [a for a in alliances if a.get('memberCount', 0) >= 10]
+            
+            self.log_test(
+                "Alliance Map Blazons for 10+ Members",
+                len(blazon_alliances) > 0,
+                f"Alliances with 10+ members showing blazons: {len(blazon_alliances)}, Total map alliances: {len(alliances)}"
+            )
+            
+            # Check blazon data structure
+            if blazon_alliances:
+                first_alliance = blazon_alliances[0]
+                has_flag = 'flag' in first_alliance and isinstance(first_alliance['flag'], dict)
+                has_coordinates = 'coordinates' in first_alliance and isinstance(first_alliance['coordinates'], dict)
+                
+                self.log_test(
+                    "Alliance Blazon Data Structure",
+                    has_flag and has_coordinates,
+                    f"Flag data present: {has_flag}, Coordinates present: {has_coordinates}, Sample: {first_alliance.get('flag', {})}"
+                )
+    
+    async def test_new_admin_features(self):
+        """Test new admin features specifically (User Requested Features)"""
+        print("\n=== Testing New Admin Features (User Requested Features) ===")
+        
+        if not self.admin_token:
+            print("⚠️  Skipping new admin features test - no admin token")
+            return
+        
+        # Use admin token for testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
+        
+        # Test broadcast message
+        broadcast_data = {
+            "content": "Welcome to Medieval Empires! Server maintenance completed successfully."
+        }
+        
+        success, data, status = await self.make_request("POST", "/admin/broadcast-message", broadcast_data, use_auth=True)
+        self.log_test(
+            "Admin Broadcast Message (POST /api/admin/broadcast-message)",
+            success and status == 200,
+            f"Status: {status}, Broadcast sent: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Test reset player resources
+        reset_data = {
+            "username": "admin"  # Reset admin's own resources for testing
+        }
+        
+        success, data, status = await self.make_request("POST", "/admin/reset-player-resources", reset_data, use_auth=True)
+        self.log_test(
+            "Admin Reset Player Resources (POST /api/admin/reset-player-resources)",
+            success and status == 200,
+            f"Status: {status}, Reset success: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Test get server logs
+        success, data, status = await self.make_request("GET", "/admin/server-logs", use_auth=True)
+        self.log_test(
+            "Admin Get Server Logs (GET /api/admin/server-logs)",
+            success and status == 200,
+            f"Status: {status}, Logs count: {len(data.get('logs', [])) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Restore original token
+        self.auth_token = original_token
+    
+    async def test_construction_queue_verification(self):
+        """Verify construction queue system is working correctly (User Reported Issue)"""
+        print("\n=== Verifying Construction Queue System (User Reported Issue) ===")
+        
+        if not self.admin_token:
+            print("⚠️  Skipping construction queue verification - no admin token")
+            return
+        
+        # Use admin token for testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
+        
+        # Test GET construction queue
+        success, data, status = await self.make_request("GET", "/game/construction/queue", use_auth=True)
+        self.log_test(
+            "Verify Construction Queue GET (GET /api/game/construction/queue)",
+            success and status == 200,
+            f"Status: {status}, Queue items: {len(data.get('queue', [])) if isinstance(data, dict) else 'error'}, Response: {data}"
+        )
+        
+        # Test POST building upgrade
+        if success and isinstance(data, dict):
+            # Get player buildings first
+            buildings_success, buildings_data, buildings_status = await self.make_request("GET", "/game/player/buildings", use_auth=True)
+            
+            if buildings_success and isinstance(buildings_data, dict):
+                buildings = buildings_data.get('buildings', [])
+                if buildings:
+                    # Try to upgrade first building that's not already upgrading
+                    for building in buildings:
+                        if not building.get('isUpgrading', False):
+                            upgrade_data = {"buildingId": building.get("id")}
+                            
+                            upgrade_success, upgrade_response, upgrade_status = await self.make_request(
+                                "POST", "/game/buildings/upgrade", upgrade_data, use_auth=True
+                            )
+                            
+                            self.log_test(
+                                "Verify Building Upgrade POST (POST /api/game/buildings/upgrade)",
+                                upgrade_success and upgrade_status == 200,
+                                f"Status: {upgrade_status}, Success: {upgrade_response.get('success', False) if isinstance(upgrade_response, dict) else 'error'}, Building: {building.get('name', 'unknown')}, Response: {upgrade_response}"
+                            )
+                            break
+        
+        # Restore original token
+        self.auth_token = original_token
+    
+    async def test_overall_system_health(self):
+        """Test overall system health - verify all previously working systems are still functional"""
+        print("\n=== Testing Overall System Health (Previously Working Systems) ===")
+        
+        if not self.admin_token:
+            print("⚠️  Skipping system health test - no admin token")
+            return
+        
+        # Use admin token for comprehensive testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
+        
+        # Test chat system
+        chat_message = {
+            "content": "System health check - chat functionality verified!"
+        }
+        success, data, status = await self.make_request("POST", "/chat/global", chat_message, use_auth=True)
+        self.log_test(
+            "System Health - Chat System",
+            success and status == 200,
+            f"Chat working: {success}, Status: {status}"
+        )
+        
+        # Test trading system
+        trade_offer = {
+            "offering": {"gold": 50, "wood": 25},
+            "requesting": {"stone": 30, "food": 20},
+            "duration": 1800
+        }
+        success, data, status = await self.make_request("POST", "/diplomacy/trade/create", trade_offer, use_auth=True)
+        self.log_test(
+            "System Health - Trading System",
+            success and status == 200,
+            f"Trading working: {success}, Status: {status}"
+        )
+        
+        # Test alliance creation
+        alliance_data = {
+            "name": f"Health Check Alliance {datetime.now().strftime('%H%M%S')}",
+            "description": "System health verification alliance"
+        }
+        success, data, status = await self.make_request("POST", "/diplomacy/alliance/create", alliance_data, use_auth=True)
+        self.log_test(
+            "System Health - Alliance Creation",
+            success and status == 200,
+            f"Alliance creation working: {success}, Status: {status}"
+        )
+        
+        # Test shop system
+        success, data, status = await self.make_request("GET", "/game/shop/items")
+        self.log_test(
+            "System Health - Shop System",
+            success and status == 200,
+            f"Shop working: {success}, Status: {status}, Items: {len(data.get('items', [])) if isinstance(data, dict) else 'error'}"
+        )
+        
+        # Restore original token
+        self.auth_token = original_token
 
     async def run_all_tests(self):
         """Run all test suites"""
