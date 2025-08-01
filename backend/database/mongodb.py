@@ -230,6 +230,8 @@ class MongoDB:
             messages = await cursor.to_list(length=limit)
             for message in messages:
                 message['id'] = str(message['_id'])
+                # Remove the _id field to avoid serialization issues
+                del message['_id']
             # Return in chronological order
             return list(reversed(messages))
         except Exception as e:
