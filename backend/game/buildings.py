@@ -97,7 +97,7 @@ class BuildingSystem:
         multiplier = 1.3 ** (level - 1)
         
         # Apply empire bonuses
-        from .empire_bonuses import EmpireBonuses
+        from game.empire_bonuses import EmpireBonuses
         time_multiplier = EmpireBonuses.get_construction_time_multiplier(empire, building_type)
         
         return int(base_time * multiplier * time_multiplier)
