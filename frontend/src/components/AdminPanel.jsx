@@ -271,7 +271,7 @@ const AdminPanel = ({ currentUser }) => {
               disabled={loading}
               variant="outline"
             >
-              <Refresh className="w-4 h-4 mr-2" />
+              <RefreshCw className="w-4 h-4 mr-2" />
               {loading ? 'Loading...' : 'Refresh'}
             </Button>
             <Button 
