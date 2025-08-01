@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthScreen from "./components/AuthScreen";
 import MultiplayerDashboard from "./components/MultiplayerDashboard";
 import { Toaster } from "./components/ui/toaster";
-import { mockMultiplayerData } from "./utils/mockMultiplayerData";
+import apiService from "./services/apiService";
 
 function App() {
   const [currentPlayer, setCurrentPlayer] = useState(null);
@@ -12,29 +12,75 @@ function App() {
 
   useEffect(() => {
     // Check if user is already logged in
-    const savedPlayer = localStorage.getItem('currentMedievalPlayer');
-    if (savedPlayer) {
-      try {
-        const playerData = JSON.parse(savedPlayer);
-        setCurrentPlayer(playerData);
-      } catch (error) {
-        console.error('Error loading saved player:', error);
-        localStorage.removeItem('currentMedievalPlayer');
+    const checkAuthStatus = async () => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          const userData = await apiService.getCurrentUser();
+          setCurrentPlayer({
+            username: userData.user.username,
+            kingdomName: userData.user.kingdomName,
+            empire: userData.user.empire,
+            isAdmin: userData.user.isAdmin,
+            ...userData.player
+          });
+        } catch (error) {
+          console.error('Error checking auth status:', error);
+          // Clear invalid token
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('currentMedievalPlayer');
+        }
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    };
+
+    checkAuthStatus();
   }, []);
 
-  const handleLogin = (playerData) => {
-    // Register or login player
-    const player = mockMultiplayerData.registerPlayer(playerData);
-    setCurrentPlayer(player);
-    localStorage.setItem('currentMedievalPlayer', JSON.stringify(player));
+  const handleLogin = async (playerData) => {
+    try {
+      let result;
+      
+      if (playerData.isRegistration) {
+        // Registration
+        result = await apiService.register({
+          username: playerData.username,
+          password: playerData.password,
+          email: playerData.email || `${playerData.username}@medievalempires.com`,
+          kingdomName: playerData.kingdomName,
+          empire: playerData.empire
+        });
+      } else {
+        // Login
+        result = await apiService.login({
+          username: playerData.username,
+          password: playerData.password
+        });
+      }
+      
+      if (result.user) {
+        // Get full player data
+        const fullUserData = await apiService.getCurrentUser();
+        const player = {
+          username: result.user.username,
+          kingdomName: result.user.kingdomName,
+          empire: result.user.empire,
+          isAdmin: result.user.isAdmin,
+          ...fullUserData.player
+        };
+        
+        setCurrentPlayer(player);
+        localStorage.setItem('currentMedievalPlayer', JSON.stringify(player));
+      }
+    } catch (error) {
+      console.error('Login/Registration failed:', error);
+      throw error;
+    }
   };
 
   const handleLogout = () => {
+    apiService.logout();
     setCurrentPlayer(null);
-    localStorage.removeItem('currentMedievalPlayer');
   };
 
   if (isLoading) {
