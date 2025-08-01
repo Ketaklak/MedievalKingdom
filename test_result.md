@@ -152,6 +152,9 @@ backend:
         - working: true
           agent: "testing"
           comment: "Chat message sending now works correctly with proper string ID serialization"
+        - working: true
+          agent: "testing"
+          comment: "Chat system fully functional. POST /api/chat/global successfully sends messages with proper string ID serialization. POST /api/chat/private also working correctly. All ObjectId serialization issues resolved."
 
   - task: "Trading System"
     implemented: true
