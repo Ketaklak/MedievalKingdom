@@ -219,9 +219,11 @@ class FocusedAPITester:
             print("⚠️  Skipping alliance creation test - no admin token")
             return
         
-        # Test create alliance
+        # Test create alliance with unique name
+        import uuid
+        unique_name = f"Test Warriors Alliance {str(uuid.uuid4())[:8]}"
         alliance_data = {
-            "name": "Test Warriors Alliance",
+            "name": unique_name,
             "description": "A mighty alliance of brave warriors seeking glory and conquest!"
         }
         
