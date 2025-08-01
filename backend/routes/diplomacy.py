@@ -278,6 +278,9 @@ async def get_alliances():
             del alliance["_id"]
             alliance["memberCount"] = len(alliance.get("members", []))
             alliance["hasFlag"] = alliance["memberCount"] >= 10  # Flag if 10+ members
+            # Convert datetime objects to ISO format strings
+            if "createdAt" in alliance and alliance["createdAt"]:
+                alliance["createdAt"] = alliance["createdAt"].isoformat()
         
         return {"alliances": alliances}
         
