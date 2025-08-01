@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
-import { Shield, Crown, Sword, Dragon, User, MapPin } from 'lucide-react';
+import { Shield, Crown, Sword, Flame, User, MapPin } from 'lucide-react';
 import apiService from '../services/apiService';
 
 const AllianceMap = () => {
