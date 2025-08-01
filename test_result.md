@@ -171,6 +171,18 @@ backend:
           agent: "testing"
           comment: "Trade offer creation now works correctly with proper datetime and ID serialization"
 
+  - task: "Shop System"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/shop.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Shop system working perfectly. GET /api/game/shop/items returns 4 items (Race Change Scroll, Resource Pack, Army Boost, Construction Boost). POST /api/game/shop/buy/{item_id} successfully purchases items with proper resource deduction and inventory updates. Purchase history and inventory endpoints also functional."
+
   - task: "Alliance Creation System"
     implemented: true
     working: true
