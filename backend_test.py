@@ -390,9 +390,13 @@ class MedievalEmpiresAPITester:
         """Test construction queue system specifically"""
         print("\n=== Testing Construction Queue System (User Reported Issue) ===")
         
-        if not self.auth_token:
-            print("⚠️  Skipping construction queue test - no auth token")
+        if not self.admin_token:
+            print("⚠️  Skipping construction queue test - no admin token")
             return
+        
+        # Use admin token for testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
         
         # Test get construction queue
         success, data, status = await self.make_request("GET", "/game/construction/queue", use_auth=True)
@@ -423,14 +427,21 @@ class MedievalEmpiresAPITester:
                         upgrade_success and upgrade_status == 200,
                         f"Status: {upgrade_status}, Success: {upgrade_response.get('success', False) if isinstance(upgrade_response, dict) else 'error'}, Response: {upgrade_response}"
                     )
+        
+        # Restore original token
+        self.auth_token = original_token
     
     async def test_chat_message_sending(self):
         """Test chat message sending specifically"""
         print("\n=== Testing Chat Message Sending (User Reported Issue) ===")
         
-        if not self.auth_token:
-            print("⚠️  Skipping chat message sending test - no auth token")
+        if not self.admin_token:
+            print("⚠️  Skipping chat message sending test - no admin token")
             return
+        
+        # Use admin token for testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
         
         # Test send global message with realistic content
         message_data = {
@@ -456,14 +467,21 @@ class MedievalEmpiresAPITester:
             success and status == 200,
             f"Status: {status}, Message sent: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
         )
+        
+        # Restore original token
+        self.auth_token = original_token
     
     async def test_trading_system(self):
         """Test trading system endpoints"""
         print("\n=== Testing Trading System (User Reported Issue) ===")
         
-        if not self.auth_token:
-            print("⚠️  Skipping trading system test - no auth token")
+        if not self.admin_token:
+            print("⚠️  Skipping trading system test - no admin token")
             return
+        
+        # Use admin token for testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
         
         # Test create trade offer
         trade_data = {
@@ -494,14 +512,21 @@ class MedievalEmpiresAPITester:
             success and status == 200,
             f"Status: {status}, My offers count: {len(data.get('offers', [])) if isinstance(data, dict) else 'error'}"
         )
+        
+        # Restore original token
+        self.auth_token = original_token
     
     async def test_alliance_system(self):
         """Test alliance creation and management"""
         print("\n=== Testing Alliance System (User Reported Issue) ===")
         
-        if not self.auth_token:
-            print("⚠️  Skipping alliance system test - no auth token")
+        if not self.admin_token:
+            print("⚠️  Skipping alliance system test - no admin token")
             return
+        
+        # Use admin token for testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
         
         # Test create alliance
         alliance_data = {
@@ -547,14 +572,21 @@ class MedievalEmpiresAPITester:
             success and status == 200,
             f"Status: {status}, Invites count: {len(data.get('invites', [])) if isinstance(data, dict) else 'error'}"
         )
+        
+        # Restore original token
+        self.auth_token = original_token
     
     async def test_profile_endpoints(self):
         """Test profile GET and PUT endpoints specifically"""
         print("\n=== Testing Profile Endpoints (User Reported Issue) ===")
         
-        if not self.auth_token:
-            print("⚠️  Skipping profile endpoints test - no auth token")
+        if not self.admin_token:
+            print("⚠️  Skipping profile endpoints test - no admin token")
             return
+        
+        # Use admin token for testing
+        original_token = self.auth_token
+        self.auth_token = self.admin_token
         
         # Test GET profile
         success, data, status = await self.make_request("GET", "/game/player/profile", use_auth=True)
@@ -576,6 +608,9 @@ class MedievalEmpiresAPITester:
             success and status == 200,
             f"Status: {status}, Update success: {data.get('success', False) if isinstance(data, dict) else 'error'}, Response: {data}"
         )
+        
+        # Restore original token
+        self.auth_token = original_token
 
     async def run_all_tests(self):
         """Run all test suites"""
