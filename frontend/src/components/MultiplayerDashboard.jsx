@@ -313,7 +313,7 @@ const MultiplayerDashboard = ({ player, onLogout }) => {
                                 <span className="font-mono">{formatTime(item.timeRemaining)}</span>
                               </div>
                               <Progress 
-                                value={((mockMultiplayerData.getBuildingTime(item.buildingType, item.targetLevel) - item.timeRemaining) / mockMultiplayerData.getBuildingTime(item.buildingType, item.targetLevel)) * 100} 
+                                value={item.progress || 0} 
                                 className="h-2"
                               />
                             </div>
