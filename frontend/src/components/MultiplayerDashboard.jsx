@@ -13,6 +13,7 @@ import { useRealTimeData, useLeaderboard, useNearbyPlayers } from '../hooks/useR
 import ChatSystem from './ChatSystem';
 import ProfileModal from './ProfileModal';
 import ShopModal from './ShopModal';
+import AllianceMap from './AllianceMap';
 import AdminPanel from './AdminPanel';
 import { useToast } from '../hooks/use-toast';
 import apiService from '../services/apiService';
