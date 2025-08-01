@@ -635,34 +635,34 @@ class MedievalEmpiresAPITester:
         
         # Test buy shop item - Resource Pack
         if success and isinstance(data, dict) and data.get('items'):
-            # Find resource pack item
-            resource_pack = next((item for item in data['items'] if item['id'] == 'resource_pack'), None)
+            # Find resource pack item (check both possible IDs)
+            resource_pack = next((item for item in data['items'] if item['id'] in ['resource_pack', 'resourcePack']), None)
             if resource_pack:
                 purchase_data = {"quantity": 1}
                 
                 buy_success, buy_response, buy_status = await self.make_request(
-                    "POST", "/game/shop/buy/resource_pack", purchase_data, use_auth=True
+                    "POST", f"/game/shop/buy/{resource_pack['id']}", purchase_data, use_auth=True
                 )
                 
                 self.log_test(
-                    "Buy Resource Pack (POST /api/game/shop/buy/resource_pack)",
+                    f"Buy Resource Pack (POST /api/game/shop/buy/{resource_pack['id']})",
                     buy_success and buy_status == 200,
                     f"Status: {buy_status}, Purchase success: {buy_response.get('success', False) if isinstance(buy_response, dict) else 'error'}, Response: {buy_response}"
                 )
         
         # Test buy shop item - Army Boost
         if success and isinstance(data, dict) and data.get('items'):
-            # Find army boost item
-            army_boost = next((item for item in data['items'] if item['id'] == 'army_boost'), None)
+            # Find army boost item (check both possible IDs)
+            army_boost = next((item for item in data['items'] if item['id'] in ['army_boost', 'armyBoost']), None)
             if army_boost:
                 purchase_data = {"quantity": 1}
                 
                 buy_success, buy_response, buy_status = await self.make_request(
-                    "POST", "/game/shop/buy/army_boost", purchase_data, use_auth=True
+                    "POST", f"/game/shop/buy/{army_boost['id']}", purchase_data, use_auth=True
                 )
                 
                 self.log_test(
-                    "Buy Army Boost (POST /api/game/shop/buy/army_boost)",
+                    f"Buy Army Boost (POST /api/game/shop/buy/{army_boost['id']})",
                     buy_success and buy_status == 200,
                     f"Status: {buy_status}, Purchase success: {buy_response.get('success', False) if isinstance(buy_response, dict) else 'error'}, Response: {buy_response}"
                 )
